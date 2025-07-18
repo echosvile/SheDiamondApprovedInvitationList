@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SheDiamond Invitation Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('flyer.jpg') no-repeat center center fixed;
+      background-size: cover;
+      animation: fadeIn 2s ease-in-out;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .container, .result-container {
+      max-width: 500px;
+      margin: 3rem auto;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+      color: #fff;
+    }
+
+    .logo {
+      max-width: 100px;
+      display: block;
+      margin: 0 auto 1rem;
+      animation: pulse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.03); opacity: 0.9; }
+    }
+
+    h1 {
+      color: #d63384;
+      margin-bottom: 0.5rem;
+    }
+
+    #countdown, #countdown-result {
+      font-size: 15px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: inline-block;
+      color: #fff;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 1rem;
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    input[type="text"]:focus {
+      border-color: #d63384;
+      box-shadow: 0 0 8px rgba(214, 51, 132, 0.5);
+      outline: none;
+    }
+
+    button {
+      background-color: #d63384;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #b92c6a;
+    }
+
+    .message {
+      font-size: 17px;
+      margin-top: 1.5rem;
+    }
+
+    .success { color: #28a745; }
+    .error { color: #ff4d4d; }
+
+    .result-container {
+      display: none;
+    }
+
+    .congrats-icon {
+      font-size: 60px;
+      color: #d63384;
+      animation: bounce 1.2s ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%   { transform: translateY(-30px); opacity: 0; }
+      50%  { transform: translateY(5px); }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .back-btn {
+      margin-top: 2rem;
+      background: transparent;
+      border: 2px solid #d63384;
+      color: #d63384;
+    }
+
+    .back-btn:hover {
+      background: #d63384;
+      color: white;
+    }
+
+    .loader {
+      display: none;
+      font-weight: bold;
+      color: #b92c6a;
+      margin-top: 1rem;
+      font-size: 15px;
+    }
+
+    .bubble {
+      position: fixed;
+      bottom: -50px;
+      width: 10px;
+      height: 10px;
+      background: #ff8ecb;
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: floatUp 10s infinite linear;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0.3; }
+      100% { transform: translateY(-120vh) scale(0.5); opacity: 0; }
+    }
+
+    a.button-link {
+      display: block;
+      margin: 0.7rem auto 0;
+      max-width: 280px;
+      background: #25D366;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    a.button-link.call {
+      background: #28a745;
+    }
+
+    @media screen and (max-width: 480px) {
+      .container, .result-container {
+        margin: 1rem;
+        padding: 1.2rem;
+      }
+
+      input[type="text"], button {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .message {
+        font-size: 15px;
+      }
+
+      .logo {
+        max-width: 70px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  for (let i = 0; i < 20; i++) {
+    const b = document.createElement("div");
+    b.classList.add("bubble");
+    b.style.left = Math.random() * 100 + "vw";
+    b.style.width = b.style.height = 5 + Math.random() * 10 + "px";
+    b.style.animationDuration = 8 + Math.random() * 5 + "s";
+    document.body.appendChild(b);
+  }
+</script>
+
+<div class="container" id="checker-section">
+  <img src="logo.jpeg" alt="Logo" class="logo" />
+  <h1>Check Your Invitation</h1>
+  <div id="countdown"></div>
+  <input type="text" inputmode="numeric" id="phoneInput" placeholder="Enter your phone number" />
+  <button onclick="checkInvite()">Check Status</button>
+  <div id="loader" class="loader">⏳ Checking...</div>
+  <div id="message" class="message"></div>
+  <div id="contact-options" style="display:none;">
+    <a href="tel:+2349121542355" class="button-link call">📞 Call Admin</a>
+    <a href="https://wa.me/2348145138382?text=Hello%20Admin%20Faith%20B%2C%20please%20My%20Name%20is%20not%20on%20the%20List." class="button-link">💬 WhatsApp Admin</a>
+  </div>
+</div>
+
+<div class="result-container container" id="result-section">
+  <img src="logo.jpeg" alt="Logo" class="logo" />
+  <div id="countdown-result"></div>
+  <div class="congrats-icon">🎉</div>
+  <div id="resultMessage" class="message" style="color:#fff;"></div>
+  <a href="tel:+2349121542355" class="button-link call">📞 Call Admin</a>
+  <a href="https://wa.me/2348145138382?text=Hello%20Admin%20Faith%20B%2C%20I%20got%20my%20reservation%20confirmation.%20Thank%20you!" class="button-link">💬 WhatsApp Admin</a>
+  <button class="back-btn" onclick="goBack()">🔙 Check Another</button>
+</div>
+
+<script>
+  async function loadGuestList() {
+    return fetch("list.json?" + Date.now())
+      .then(response => response.json())
+      .catch(error => {
+        document.getElementById("message").innerText = "❌ Failed to load guest list.";
+        console.error("Fetch error:", error);
+      });
+  }
+
+  function goBack() {
+    document.getElementById("result-section").style.display = "none";
+    document.getElementById("checker-section").style.display = "block";
+    document.getElementById("phoneInput").value = "";
+    document.getElementById("message").innerText = "";
+    document.getElementById("contact-options").style.display = "none";
+  }
+
+  async function checkInvite() {
+    const input = document.getElementById("phoneInput").value.trim();
+    const loader = document.getElementById("loader");
+    const messageDiv = document.getElementById("message");
+    const resultDiv = document.getElementById("resultMessage");
+    const contactOptions = document.getElementById("contact-options");
+
+    loader.style.display = "block";
+    messageDiv.innerText = "";
+    contactOptions.style.display = "none";
+
+    const data = await loadGuestList();
+    loader.style.display = "none";
+
+    if (data && data[input]) {
+      const name = data[input];
+      resultDiv.innerHTML = `
+        <div style="font-size: 15px; line-height: 1.6;">
+          <strong style="font-size: 18px;">🎉 Congratulations ${name}!</strong><br><br>
+          <span style="color:#fff;">You have been selected to attend </span>
+          <strong style="color:#d63384;">The SheDiamond Event on Saturday, 19th July 2025 by 10:00AM.</strong><br><br>
+          <span style="color:#fff;">Your reservation </span>
+          <strong style="color:#238636;">821/OI/CAE/4708</strong>
+          <span style="color:#fff;"> has been sent to </span>
+          <strong style="color:#d63384;">${input}</strong>
+          <span style="color:#fff;"> via SMS.</span><br><br>
+          <p style="color:#fff; margin-top: 10px;">
+            Your private <strong>TICKET ID</strong> number will be given to you at the Reception Desk when you present this or the <strong>SMS SENT TO YOU</strong>.
+          </p>
+          <span style="color:#fff;">📞 Kindly reach out to </span>
+          <strong style="color:#d63384;">Admin Faith B.</strong>
+          <span style="color:#fff;"> if you didn’t receive it.</span>
+        </div>
+      `;
+      document.getElementById("checker-section").style.display = "none";
+      document.getElementById("result-section").style.display = "block";
+    } else {
+      messageDiv.innerHTML = `❌ This number (<strong>${input}</strong>) is <strong>not on the invitation list</strong>.<br>Please contact Admin.`;
+      messageDiv.className = "message error";
+      contactOptions.style.display = "block";
+    }
+  }
+
+  document.getElementById("phoneInput").addEventListener("keyup", function(e) {
+    if (e.key === "Enter") checkInvite();
+  });
+
+  const eventDate = new Date("July 19, 2025 00:00:00").getTime();
+  const countdownEl = document.getElementById("countdown");
+  const countdownResult = document.getElementById("countdown-result");
+
+  setInterval(() => {
+    const now = new Date().getTime();
+    const distance = eventDate - now;
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const text = `🕒 Event starts in ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    countdownEl.innerText = text;
+    countdownResult.innerText = text;
+  }, 1000);
+</script>
+
+</body>
+</html>

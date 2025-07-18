@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SheDiamond Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      margin: 10px 0;
+      padding: 12px;
+      width: 100%;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #d63384;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b92c6a;
+    }
+    .hidden { display: none; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>🔐 Admin Login</h2>
+    <div id="login">
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <p id="loginMsg" class="error"></p>
+    </div>
+
+    <div id="dashboard" class="hidden">
+      <h3>Add to Guest List</h3>
+      <input type="tel" id="number" placeholder="Phone Number (e.g. 08012345678)" pattern="[0-9]*" inputmode="numeric" />
+      <input type="text" id="name" placeholder="Name (e.g. Ma)" />
+      <button onclick="handleSubmit()">Add to List</button>
+      <p id="status"></p>
+    </div>
+  </div>
+
+  <script>
+    const correctUsername = "Faith";
+    const correctPassword = "1126";
+    let githubToken = "";
+
+    function login() {
+      const u = document.getElementById("username").value;
+      const p = document.getElementById("password").value;
+      if (u === correctUsername && p === correctPassword) {
+        githubToken = prompt("🔐 Enter your GitHub token:");
+        if (!githubToken) {
+          document.getElementById("loginMsg").innerText = "GitHub token is required.";
+          return;
+        }
+        document.getElementById("login").classList.add("hidden");
+        document.getElementById("dashboard").classList.remove("hidden");
+        document.getElementById("loginMsg").innerText = "";
+      } else {
+        document.getElementById("loginMsg").innerText = "Incorrect username or password.";
+      }
+    }
+  </script>
+  <script src="admin.js"></script>
+</body>
+</html>
