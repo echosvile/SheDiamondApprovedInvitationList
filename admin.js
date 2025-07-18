@@ -1,6 +1,6 @@
 async function addGuestToList(name, number) {
   const token = githubToken;
-  const repo = "SheDiamond-Approved-Attendance-List";
+  const repo = "SheDiamondApprovedInvitationList";
   const username = "echosvile";
   const file = "list.json";
   const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${file}`;
