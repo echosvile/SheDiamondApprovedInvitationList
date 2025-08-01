@@ -168,16 +168,18 @@
     }
 
     .popup-content {
-      background: #fff;
-      padding: 2.5rem;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      color: #333;
-      animation: fadeInZoom 0.5s ease;
-      position: relative;
-    }
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  color: #333;
+  animation: fadeInZoom 0.5s ease;
+  position: relative;
+  max-height: 85vh;         /* Limit popup height */
+  overflow-y: auto;         /* Enable scroll inside */
+}
 
     @keyframes fadeInZoom {
       from { opacity: 0; transform: scale(0.9); }
@@ -328,16 +330,18 @@
     }
 
     function openPopup() {
-      document.getElementById("popup").style.display = "flex";
-    }
+  document.getElementById("popup").style.display = "flex";
+  document.body.style.overflow = 'hidden';  // Lock background
+}
 
-    function closePopup() {
-      document.getElementById("popup").style.display = "none";
-      document.getElementById("loader").style.display = "none";
-      document.getElementById("phoneInput").value = "";
-      document.getElementById("resultBox").innerHTML = "";
-      document.getElementById("inputGroup").style.display = "block";
-    }
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("phoneInput").value = "";
+  document.getElementById("resultBox").innerHTML = "";
+  document.getElementById("inputGroup").style.display = "block";
+  document.body.style.overflow = 'auto';    // Unlock background
+}
 
     async function checkInvite() {
       const phone = document.getElementById("phoneInput").value.trim();
