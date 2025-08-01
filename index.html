@@ -4,118 +4,233 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>SheDiamond Invitation Checker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
+    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+    html, body {
       font-family: 'Montserrat', sans-serif;
-      background: #fff;
-      color: #333;
       overflow-x: hidden;
     }
 
-    header {
-      background: url('background.jpg') no-repeat center center;
-      background-size: cover;
-      padding: 7rem 2rem 4rem;
-      text-align: center;
-      color: white;
-    }
-
-    header h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.8rem;
-      margin-bottom: 0.3rem;
-    }
-
-    header h2 {
-      font-size: 1.2rem;
-      font-weight: 400;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    #countdown {
-      margin: 1.5rem auto 2rem;
-      display: inline-block;
-      background: rgba(0,0,0,0.6);
+    /* NAVIGATION */
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 999;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 10px 20px;
-      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    nav img { height: 40px; }
+
+    nav ul {
+      display: flex;
+      gap: 1.2rem;
+      list-style: none;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 0.95rem;
       font-weight: bold;
     }
 
-    button {
-      background: #d63384;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
+    .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 60px; right: 10px;
+      background: rgba(0,0,0,0.95);
+      padding: 1.5rem;
+      border-radius: 12px;
     }
 
+    .mobile-menu a {
+      display: block;
+      margin-bottom: 1rem;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* SECTION BASE */
     section {
-      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      padding: 5rem 1.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+    }
+
+    section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* PARALLAX HERO */
+    .hero {
+      background: url('background.jpg') center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    .hero h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h2 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+
+    #countdown {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero button {
+      background: #d63384;
+      color: white;
+      padding: 12px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transform: scale(1);
+      transition: transform 0.3s;
+    }
+
+    .hero button:active {
+      transform: scale(0.95);
     }
 
     .event-info {
-      background-color: #fef6f2;
+      background: #fef6f2;
       color: #3b3b3b;
+    }
+
+    .event-info h2,
+    .mission h2 {
+      color: #d63384;
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .event-info p,
+    .mission p {
+      font-size: 1.05rem;
+      line-height: 2;
     }
 
     .mission {
-      background-color: #fcf0f5;
-      color: #3b3b3b;
+      background: #fcf0f5;
     }
 
-    .mission h2,
-    .event-info h2 {
-      color: #d63384;
-      margin-bottom: 0.8rem;
+    .mission img {
+      margin-top: 2rem;
+      border-radius: 16px;
+      max-width: 90%;
+      opacity: 0;
+      transform: translateX(40px);
+      transition: all 1.5s ease;
     }
 
+    .mission.active img {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* POPUP */
     .popup {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
+      z-index: 1000;
     }
 
     .popup-content {
       background: #fff;
       padding: 2.5rem;
       border-radius: 16px;
-      max-width: 400px;
       width: 90%;
+      max-width: 400px;
       text-align: center;
       color: #333;
+      animation: fadeInZoom 0.5s ease;
       position: relative;
+    }
+
+    @keyframes fadeInZoom {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .close-btn {
       position: absolute;
       top: 15px;
       right: 20px;
-      font-size: 22px;
+      font-size: 20px;
       color: #999;
       cursor: pointer;
     }
 
-    .loader {
+    .popup-content input {
+      width: 100%;
+      padding: 14px;
       margin-top: 1rem;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .popup-content button {
+      margin-top: 1rem;
+      width: 100%;
+      padding: 12px;
+      background: #d63384;
+      color: white;
+      font-size: 15px;
+      border: none;
+      border-radius: 6px;
+    }
+
+    .loader {
+      margin: 1.2rem auto;
       width: 30px; height: 30px;
       border: 3px solid #ccc;
       border-top: 3px solid #d63384;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       display: none;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     @keyframes spin {
@@ -124,14 +239,13 @@
     }
 
     .result-box {
+      margin-top: 1rem;
       display: none;
-      margin-top: 1.5rem;
     }
 
-    .result-box h3 {
+    .result-box h4 {
       color: #d63384;
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.7rem;
     }
 
     .result-box p {
@@ -140,53 +254,67 @@
     }
 
     .whatsapp-btn {
+      margin-top: 1rem;
       display: inline-block;
-      margin-top: 1.2rem;
-      padding: 12px 18px;
       background: #25D366;
       color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
-      border-radius: 8px;
     }
 
-    .check-btn {
-      margin-top: 2rem;
-    }
-
-    .check-input {
-      width: 100%;
-      padding: 14px;
-      margin-top: 1rem;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .menu-toggle { display: block; }
+      .mobile-menu.active { display: block; }
     }
   </style>
 </head>
 <body>
 
-  <header>
+  <!-- NAVIGATION -->
+  <nav>
+    <img src="logo.png" alt="SheDiamond Logo" />
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#event">Event Info</a></li>
+      <li><a href="#mission">Mission</a></li>
+    </ul>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home">Home</a>
+      <a href="#event">Event Info</a>
+      <a href="#mission">Mission</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="home">
     <h1>The SheDiamond August Edition</h1>
     <h2>Invitation Checker</h2>
-    <div id="countdown">Loading countdown...</div>
+    <div id="countdown">Loading...</div>
     <button onclick="openPopup()">📥 Confirm Reservation</button>
-  </header>
-
-  <section class="event-info">
-    <h2>Join Us As We Transform and Impact Women</h2>
-    <p>📅 Date: Saturday, 2nd August 2025</p>
-    <p>⏰ Time: 12:00 PM</p>
-    <p>📍 Location: First Floor Hall, St. Leo Catholic Church, Toyin Street, Ikeja, Lagos</p>
   </section>
 
-  <section class="mission">
+  <!-- EVENT INFO SECTION -->
+  <section class="event-info" id="event">
+    <h2>Join Us As We Transform And Raise Diamonds</h2>
+    <p>📅 Date: Saturday, 2nd August 2025</p>
+    <p>⏰ Time: 10:00 AM</p>
+    <p>📍 Location: Ground Floor Hall, St. Leo Catholic Church, Toyin Street, Ikeja, Lagos</p>
+  </section>
+
+  <!-- MISSION SECTION -->
+  <section class="mission" id="mission">
     <h2>Our Mission</h2>
     <p>
-      To raise 5,000 women to be financially free in Nigeria. <br />
-      If you received an invitation, God is bringing you here for a reason.<br />
+      To raise 5,000 women to be financially free in Nigeria.<br>
+      If you received an invitation, God is bringing you here for a reason.<br>
       If you received a reservation — don’t waste it.
     </p>
+    <img src="mission.jpg" alt="Mission Visual" />
   </section>
 
   <!-- POPUP -->
@@ -194,34 +322,21 @@
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">✖</span>
       <h3>Enter Your Phone Number</h3>
-      <input type="text" id="phoneInput" placeholder="e.g. 08012345678" class="check-input" />
-      <button class="check-btn" onclick="checkInvite()">Check</button>
+      <input type="text" id="phoneInput" placeholder="e.g. 08012345678" />
+      <button onclick="checkInvite()">Check</button>
       <div class="loader" id="loader"></div>
       <div class="result-box" id="resultBox"></div>
     </div>
   </div>
 
-  <!-- COUNTDOWN SCRIPT -->
+  <!-- JS -->
   <script>
-    const countdownEl = document.getElementById("countdown");
-    const eventDate = new Date("August 2, 2025 12:00:00").getTime();
+    function toggleMenu() {
+      document.getElementById("mobileMenu").classList.toggle("active");
+    }
 
-    setInterval(() => {
-      const now = new Date().getTime();
-      const diff = eventDate - now;
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((diff % (1000 * 60)) / 1000);
-      countdownEl.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
-    }, 1000);
-  </script>
-
-  <!-- CHECKER SCRIPT -->
-  <script>
     function openPopup() {
       document.getElementById("popup").style.display = "flex";
-      document.getElementById("resultBox").style.display = "none";
     }
 
     function closePopup() {
@@ -237,8 +352,8 @@
       const resultBox = document.getElementById("resultBox");
 
       loader.style.display = "block";
-      resultBox.style.display = "none";
       resultBox.innerHTML = "";
+      resultBox.style.display = "none";
 
       const data = await fetch("list.json?" + Date.now()).then(res => res.json());
 
@@ -248,23 +363,43 @@
 
         if (data[phone]) {
           resultBox.innerHTML = `
-            <h3>🎉 Congratulations ${data[phone]}!</h3>
-            <p>You’ve been selected to attend SheDiamond 2025.</p>
-            <p>📩 Reservation has been sent to <strong>${phone}</strong></p>
-            <p>Show this or your SMS at the entrance to receive your <strong>TICKET ID</strong>.</p>
-            <a href="https://wa.me/2348145138382?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there"
-              class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
+            <h4>🎉 Congratulations ${data[phone]}!</h4>
+            <p>You’ve been selected to attend SheDiamond August Edition.<br>
+            Your Reservation 821/OI/CAE/LOA/4708 was sent to <strong>${phone}</strong>.<br>
+            Show this or your SMS to receive your <strong>TICKET ID</strong>.</p>
+            <a href="https://wa.me/2348145138382?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
           `;
         } else {
           resultBox.innerHTML = `
-            <p style="color:red;">❌ Number not found.</p>
-            <p>Please reach out to Admin Faith B. immediately.</p>
-            <a href="https://wa.me/2348145138382?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list"
-              class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
+            <p style="color:red;">❌ Your Invitation not found.</p>
+            <p>Please contact Admin immediately.</p>
+            <a href="https://wa.me/2348145138382?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list." class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
           `;
         }
-      }, 4000);
+      }, 3500);
     }
+
+    const countdownEl = document.getElementById("countdown");
+    const eventDate = new Date("August 2, 2025 10:00:00").getTime();
+
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = eventDate - now;
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+      countdownEl.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
+    }, 1000);
+
+    // Reveal sections on scroll
+    const sections = document.querySelectorAll("section");
+    window.addEventListener("scroll", () => {
+      sections.forEach(sec => {
+        const top = window.scrollY + window.innerHeight - 100;
+        if (top > sec.offsetTop) sec.classList.add("active");
+      });
+    });
   </script>
 </body>
 </html>
