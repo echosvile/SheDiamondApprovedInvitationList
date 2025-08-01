@@ -3,238 +3,208 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>SheDiamond August Edition</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <title>SheDiamond Invitation Checker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Montserrat', sans-serif;
-      color: #fff;
-      background: #111;
+      background: #fff;
+      color: #333;
       overflow-x: hidden;
     }
-    .bg-slideshow {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-    }
-    .bg-slide {
-      position: absolute;
-      width: 100%; height: 100%;
-      background-size: cover;
-      background-position: center;
-      opacity: 0;
-      animation: fade 21s infinite;
-    }
-    .bg-slide:nth-child(1) { animation-delay: 0s; }
-    .bg-slide:nth-child(2) { animation-delay: 7s; }
-    .bg-slide:nth-child(3) { animation-delay: 14s; }
-    @keyframes fade {
-      0%, 100% { opacity: 0; }
-      10%, 30% { opacity: 1; }
-      40%, 100% { opacity: 0; }
-    }
-    nav {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.7rem 1.5rem;
-      z-index: 1000;
-    }
-    nav img.logo { height: 40px; }
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-    }
-    nav ul li {
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    nav ul li a {
-      color: inherit;
-      text-decoration: none;
-    }
-    nav ul li:hover { color: #f77fc2; }
 
-    .hero {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    header {
+      background: url('background.jpg') no-repeat center center;
+      background-size: cover;
+      padding: 7rem 2rem 4rem;
       text-align: center;
-      padding: 1rem;
-      background: rgba(0,0,0,0.3);
+      color: white;
     }
-    .hero h1 {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
+
+    header h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    header h2 {
+      font-size: 1.2rem;
+      font-weight: 400;
+      letter-spacing: 1px;
       text-transform: uppercase;
     }
-    .hero h2 {
-      font-size: 2.4rem;
-      color: #f77fc2;
-      margin-bottom: 1rem;
-    }
+
     #countdown {
-      background: rgba(0,0,0,0.5);
+      margin: 1.5rem auto 2rem;
+      display: inline-block;
+      background: rgba(0,0,0,0.6);
       padding: 10px 20px;
-      border-radius: 20px;
-      margin-bottom: 1.2rem;
+      border-radius: 25px;
+      font-weight: bold;
     }
-    .hero button {
+
+    button {
       background: #d63384;
+      color: white;
       border: none;
-      padding: 14px 24px;
+      padding: 12px 24px;
       font-size: 16px;
-      color: #fff;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
+    }
+
+    section {
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .event-info {
+      background-color: #fef6f2;
+      color: #3b3b3b;
+    }
+
+    .mission {
+      background-color: #fcf0f5;
+      color: #3b3b3b;
+    }
+
+    .mission h2,
+    .event-info h2 {
+      color: #d63384;
+      margin-bottom: 0.8rem;
     }
 
     .popup {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 999;
+      z-index: 9999;
     }
+
     .popup-content {
-      background: #1c1c1c;
-      padding: 2rem;
-      border-radius: 14px;
-      width: 90%;
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 16px;
       max-width: 400px;
-      position: relative;
+      width: 90%;
       text-align: center;
+      color: #333;
+      position: relative;
     }
-    .popup-content input {
-      width: 100%;
-      padding: 14px;
-      margin-bottom: 1rem;
-      background: #2a2a2a;
-      border: none;
-      color: #fff;
-      border-radius: 8px;
-    }
-    .popup-content button {
-      width: 100%;
-      padding: 12px;
-      background: #d63384;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      border-radius: 8px;
-    }
+
     .close-btn {
       position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 20px;
+      top: 15px;
+      right: 20px;
+      font-size: 22px;
+      color: #999;
       cursor: pointer;
     }
+
     .loader {
-      margin: 1rem auto 0;
-      border: 3px solid #eee;
+      margin-top: 1rem;
+      width: 30px; height: 30px;
+      border: 3px solid #ccc;
       border-top: 3px solid #d63384;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
       animation: spin 1s linear infinite;
       display: none;
+      margin-left: auto;
+      margin-right: auto;
     }
+
     @keyframes spin {
-      0% { transform: rotate(0deg); }
+      0% { transform: rotate(0); }
       100% { transform: rotate(360deg); }
     }
-    .congrats-box {
+
+    .result-box {
       display: none;
-      background: #111;
-      padding: 1.5rem;
-      border-radius: 12px;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
-    section {
-      padding: 4rem 2rem;
-      text-align: center;
-    }
-    section h2 {
-      color: #f77fc2;
+
+    .result-box h3 {
+      color: #d63384;
+      font-size: 1.4rem;
       margin-bottom: 1rem;
     }
-    section img {
-      max-width: 90%;
-      border-radius: 16px;
-      margin-top: 1.5rem;
-      transform: rotate(-1.5deg);
+
+    .result-box p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .whatsapp-btn {
+      display: inline-block;
+      margin-top: 1.2rem;
+      padding: 12px 18px;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    .check-btn {
+      margin-top: 2rem;
+    }
+
+    .check-input {
+      width: 100%;
+      padding: 14px;
+      margin-top: 1rem;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 <body>
 
-  <div class="bg-slideshow">
-    <div class="bg-slide" style="background-image: url('flyer.jpg');"></div>
-    <div class="bg-slide" style="background-image: url('event1.jpg');"></div>
-    <div class="bg-slide" style="background-image: url('event2.jpg');"></div>
-  </div>
-
-  <nav>
-    <img src="shediamond-logo.png" class="logo" />
-    <ul>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li onclick="scrollToSection('event')">Event Info</li>
-      <li onclick="scrollToSection('mission')">Mission</li>
-      <li onclick="openPopup()">Confirm</li>
-    </ul>
-  </nav>
-
-  <section class="hero">
-    <h1>THE SHEDIAMOND AUGUST EDITION</h1>
-    <h2>INVITATION CHECKER</h2>
+  <header>
+    <h1>The SheDiamond August Edition</h1>
+    <h2>Invitation Checker</h2>
     <div id="countdown">Loading countdown...</div>
-    <button onclick="openPopup()">📥 CONFIRM RESERVATION</button>
+    <button onclick="openPopup()">📥 Confirm Reservation</button>
+  </header>
+
+  <section class="event-info">
+    <h2>Join Us As We Transform and Impact Women</h2>
+    <p>📅 Date: Saturday, 2nd August 2025</p>
+    <p>⏰ Time: 12:00 PM</p>
+    <p>📍 Location: First Floor Hall, St. Leo Catholic Church, Toyin Street, Ikeja, Lagos</p>
   </section>
 
+  <section class="mission">
+    <h2>Our Mission</h2>
+    <p>
+      To raise 5,000 women to be financially free in Nigeria. <br />
+      If you received an invitation, God is bringing you here for a reason.<br />
+      If you received a reservation — don’t waste it.
+    </p>
+  </section>
+
+  <!-- POPUP -->
   <div class="popup" id="popup">
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">✖</span>
       <h3>Enter Your Phone Number</h3>
-      <input type="text" id="phoneInput" placeholder="e.g. 08012345678" />
-      <button onclick="checkInvite()">Check</button>
+      <input type="text" id="phoneInput" placeholder="e.g. 08012345678" class="check-input" />
+      <button class="check-btn" onclick="checkInvite()">Check</button>
       <div class="loader" id="loader"></div>
-      <div class="congrats-box" id="congratsBox"></div>
+      <div class="result-box" id="resultBox"></div>
     </div>
   </div>
 
-  <section id="event" style="background: rgba(255,255,255,0.05);">
-    <h2>Join Us As We Transform and Impact Women</h2>
-    <p>📅 Date: Saturday, August 3rd, 2025</p>
-    <p>⏰ Time: 10:00 AM</p>
-    <p>📍 Location: First Floor Hall, St. Leo’s Catholic Church, Ikeja, Lagos</p>
-  </section>
-
-  <section id="mission">
-    <h2>Our Mission</h2>
-    <p>To raise 5,000 women to be financially free in Nigeria.<br>
-       If you received an invitation, God is bringing you here for a reason.<br>
-       If you received a reservation — don’t waste it.</p>
-    <img src="mission.jpg" alt="Mission Image" />
-  </section>
-
+  <!-- COUNTDOWN SCRIPT -->
   <script>
-    const countdown = document.getElementById("countdown");
-    const eventDate = new Date("August 3, 2025 10:00:00").getTime();
+    const countdownEl = document.getElementById("countdown");
+    const eventDate = new Date("August 2, 2025 12:00:00").getTime();
 
     setInterval(() => {
       const now = new Date().getTime();
@@ -243,29 +213,28 @@
       const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const s = Math.floor((diff % (1000 * 60)) / 1000);
-      countdown.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
+      countdownEl.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
     }, 1000);
+  </script>
 
+  <!-- CHECKER SCRIPT -->
+  <script>
     function openPopup() {
       document.getElementById("popup").style.display = "flex";
-      document.getElementById("congratsBox").style.display = "none";
+      document.getElementById("resultBox").style.display = "none";
     }
 
     function closePopup() {
       document.getElementById("popup").style.display = "none";
       document.getElementById("loader").style.display = "none";
-      document.getElementById("congratsBox").style.display = "none";
       document.getElementById("phoneInput").value = "";
-    }
-
-    function scrollToSection(id) {
-      document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+      document.getElementById("resultBox").innerHTML = "";
     }
 
     async function checkInvite() {
       const phone = document.getElementById("phoneInput").value.trim();
       const loader = document.getElementById("loader");
-      const resultBox = document.getElementById("congratsBox");
+      const resultBox = document.getElementById("resultBox");
 
       loader.style.display = "block";
       resultBox.style.display = "none";
@@ -275,28 +244,23 @@
 
       setTimeout(() => {
         loader.style.display = "none";
+        resultBox.style.display = "block";
+
         if (data[phone]) {
-          resultBox.style.display = "block";
           resultBox.innerHTML = `
             <h3>🎉 Congratulations ${data[phone]}!</h3>
             <p>You’ve been selected to attend SheDiamond 2025.</p>
-            <p>📩 Reservation sent to ${phone}</p>
+            <p>📩 Reservation has been sent to <strong>${phone}</strong></p>
             <p>Show this or your SMS at the entrance to receive your <strong>TICKET ID</strong>.</p>
-            <a href="https://wa.me/2348145138382?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there."
-               target="_blank"
-               style="display:inline-block;margin-top:12px;padding:10px 18px;background:#25D366;color:white;border-radius:8px;text-decoration:none;">
-              💬 Chat Admin
-            </a>
+            <a href="https://wa.me/2348145138382?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there"
+              class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
           `;
         } else {
-          resultBox.style.display = "block";
           resultBox.innerHTML = `
-            <p style="color: red;">❌ Number not found. Please contact Admin Faith B.</p>
-            <a href="https://wa.me/2348145138382?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list."
-               target="_blank"
-               style="display:inline-block;margin-top:12px;padding:10px 18px;background:#25D366;color:white;border-radius:8px;text-decoration:none;">
-              💬 Chat Admin
-            </a>
+            <p style="color:red;">❌ Number not found.</p>
+            <p>Please reach out to Admin Faith B. immediately.</p>
+            <a href="https://wa.me/2348145138382?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list"
+              class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
           `;
         }
       }, 4000);
