@@ -284,10 +284,10 @@
   <!-- HERO SECTION -->
   <section class="hero" id="home">
     <div class="hero-content-box">
-      <h1>The SheDiamond August Edition</h1>
-      <h2>Invitation Checker</h2>
+      <h1>CHECK YOUR INVITATION</h1>
+      <h1>Event Starts In</h1>
       <div id="countdown">Loading...</div>
-      <button onclick="openPopup()">📥 Confirm Reservation</button>
+      <button onclick="openPopup()"> Click To Confirm  Reservation</button>
     </div>
   </section>
 
@@ -295,7 +295,7 @@
   <section class="event-info" id="event">
     <h2>Join Us As We Transform And Raise Diamonds</h2>
     <p>📅 Date: Saturday, 2nd August 2025</p>
-    <p>⏰ Time: 10:00 AM</p>
+    <p>⏰ Time: 10:30 AM</p>
     <p>📍 Location: Ground Floor Hall, St. Leo Catholic Church, Toyin Street, Ikeja, Lagos</p>
   </section>
 
@@ -304,8 +304,8 @@
     <h2>Our Mission</h2>
     <p>
       To raise 5,000 women to be financially free in Nigeria.<br>
-      If you received an invitation, God is bringing you here for a reason.<br>
-      If you received a reservation — don’t waste it.
+      If you received an invitation, God is bringing you here for a reason.</p>
+      
     </p>
     <img src="mission.jpg" alt="Mission Visual" />
   </section>
@@ -382,7 +382,7 @@ function closePopup() {
     }
 
     const countdownEl = document.getElementById("countdown");
-    const eventDate = new Date("August 2, 2025 10:00:00").getTime();
+    const eventDate = new Date("August 2, 2025 10:30:00").getTime();
 
     setInterval(() => {
       const now = new Date().getTime();
