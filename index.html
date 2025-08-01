@@ -75,10 +75,14 @@
     }
 
     .hero-content-box {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 2rem;
-      border-radius: 16px;
-      max-width: 90%;
+  background: rgba(0, 0, 0, 0.75); /* darker neon */
+  padding: 2.5rem;
+  border-radius: 20px;
+  max-width: 90%;
+  box-shadow: 0 0 25px rgba(214, 51, 132, 0.3);
+  backdrop-filter: blur(8px);
+}
+
     }
 
     .hero h1 {
@@ -353,17 +357,21 @@
 
         if (data[phone]) {
           resultBox.innerHTML = `
-            <h4>🎉 Congratulations ${data[phone]}!</h4>
-            <p>You’ve been selected to attend SheDiamond August Edition.<br>
-            Your Reservation 821/OI/CAE/LOA/4708 was sent to <strong>${phone}</strong>.<br>
-            Show this or your SMS to receive your <strong>TICKET ID</strong>.</p>
-            <a href="https://wa.me/2348145138382?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
-          `;
+  <div style="background: #f8f0f5; padding: 1.8rem; border-radius: 16px; box-shadow: 0 0 20px rgba(214, 51, 132, 0.2); text-align: center;">
+    <h4 style="color: #d63384; font-size: 22px; margin-bottom: 1rem;">🎉 Congratulations ${data[phone]}!</h4>
+    <p style="font-size: 15px; line-height: 1.8; color: #444;">
+      You’ve been selected to attend the <strong>SheDiamond August Edition</strong>.<br><br>
+      Your reservation <strong style="color: #238636;">821/OI/CAE/LOA/1513</strong> was sent to<br><strong style="color: #d63384;">${phone}</strong> via SMS.<br><br>
+      Present this or the SMS at the reception to be allowed in.
+    </p>
+    <a href="https://wa.me/2348087136317?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank" style="margin-top: 1.5rem; display: inline-block;">💬 Acknowledge</a>
+  </div>
+`;
         } else {
           resultBox.innerHTML = `
             <p style="color:red;">❌ Your Invitation not found.</p>
             <p>Please contact Admin immediately.</p>
-            <a href="https://wa.me/2348145138382?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list." class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
+            <a href="https://wa.me/2348087136317?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list." class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
           `;
         }
       }, 3000);
