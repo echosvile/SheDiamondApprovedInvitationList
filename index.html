@@ -1,4 +1,3 @@
-<!-- Begin of the index.html content -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +58,12 @@
       font-weight: 600;
       cursor: pointer;
     }
+    nav ul li a {
+      color: inherit;
+      text-decoration: none;
+    }
     nav ul li:hover { color: #f77fc2; }
+
     .hero {
       height: 100vh;
       display: flex;
@@ -95,6 +99,7 @@
       border-radius: 10px;
       cursor: pointer;
     }
+
     .popup {
       position: fixed;
       top: 0; left: 0;
@@ -178,25 +183,22 @@
 </head>
 <body>
 
-  <!-- Background slideshow -->
   <div class="bg-slideshow">
     <div class="bg-slide" style="background-image: url('flyer.jpg');"></div>
     <div class="bg-slide" style="background-image: url('event1.jpg');"></div>
     <div class="bg-slide" style="background-image: url('event2.jpg');"></div>
   </div>
 
-  <!-- Navbar -->
   <nav>
     <img src="shediamond-logo.png" class="logo" />
     <ul>
-      <li onclick="scrollToSection('quote')">Quote</li>
+      <li><a href="gallery.html">Gallery</a></li>
       <li onclick="scrollToSection('event')">Event Info</li>
       <li onclick="scrollToSection('mission')">Mission</li>
       <li onclick="openPopup()">Confirm</li>
     </ul>
   </nav>
 
-  <!-- Hero -->
   <section class="hero">
     <h1>THE SHEDIAMOND AUGUST EDITION</h1>
     <h2>INVITATION CHECKER</h2>
@@ -204,7 +206,6 @@
     <button onclick="openPopup()">📥 CONFIRM RESERVATION</button>
   </section>
 
-  <!-- Popup -->
   <div class="popup" id="popup">
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">✖</span>
@@ -215,13 +216,6 @@
       <div class="congrats-box" id="congratsBox"></div>
     </div>
   </div>
-
-  <!-- Scroll Sections -->
-  <section id="quote">
-    <blockquote style="font-size: 1.2rem; font-style: italic;">
-      “There is no limit to what we, as women, can accomplish.”<br>– Michelle Obama
-    </blockquote>
-  </section>
 
   <section id="event" style="background: rgba(255,255,255,0.05);">
     <h2>Join Us As We Transform and Impact Women</h2>
@@ -238,7 +232,6 @@
     <img src="mission.jpg" alt="Mission Image" />
   </section>
 
-  <!-- Scripts -->
   <script>
     const countdown = document.getElementById("countdown");
     const eventDate = new Date("August 3, 2025 10:00:00").getTime();
