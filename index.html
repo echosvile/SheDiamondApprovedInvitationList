@@ -6,7 +6,7 @@
   <title>SheDiamond Invitation Checker</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     html, body {
       font-family: 'Montserrat', sans-serif;
@@ -61,30 +61,24 @@
       font-weight: bold;
     }
 
-    /* SECTION BASE */
-    section {
-      min-height: 100vh;
-      padding: 5rem 1.5rem 3rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1s ease;
-    }
-
-    section.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* PARALLAX HERO */
+    /* HERO SECTION */
     .hero {
-      background: url('background.jpg') center center fixed;
+      background: url('background.jpg') center center no-repeat;
       background-size: cover;
       color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .hero-content-box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 16px;
+      max-width: 90%;
     }
 
     .hero h1 {
@@ -100,7 +94,7 @@
     }
 
     #countdown {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.2);
       padding: 12px 24px;
       border-radius: 30px;
       font-weight: 600;
@@ -121,17 +115,14 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transform: scale(1);
-      transition: transform 0.3s;
-    }
-
-    .hero button:active {
-      transform: scale(0.95);
+      margin-top: 1rem;
     }
 
     .event-info {
       background: #fef6f2;
       color: #3b3b3b;
+      text-align: center;
+      padding: 4rem 1.5rem;
     }
 
     .event-info h2,
@@ -148,21 +139,16 @@
     }
 
     .mission {
-      background: #fcf0f5;
+      background: #072235;
+      color: #fff;
+      text-align: center;
+      padding: 4rem 1.5rem;
     }
 
     .mission img {
       margin-top: 2rem;
       border-radius: 16px;
       max-width: 90%;
-      opacity: 0;
-      transform: translateX(40px);
-      transition: all 1.5s ease;
-    }
-
-    .mission.active img {
-      opacity: 1;
-      transform: translateX(0);
     }
 
     /* POPUP */
@@ -264,7 +250,6 @@
       font-weight: bold;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       nav ul { display: none; }
       .menu-toggle { display: block; }
@@ -279,12 +264,12 @@
     <img src="logo.png" alt="SheDiamond Logo" />
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul>
-      <li><a href="#home">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
       <li><a href="#event">Event Info</a></li>
       <li><a href="#mission">Mission</a></li>
     </ul>
     <div class="mobile-menu" id="mobileMenu">
-      <a href="#home">Home</a>
+      <a href="gallery.html">Gallery</a>
       <a href="#event">Event Info</a>
       <a href="#mission">Mission</a>
     </div>
@@ -292,10 +277,12 @@
 
   <!-- HERO SECTION -->
   <section class="hero" id="home">
-    <h1>The SheDiamond August Edition</h1>
-    <h2>Invitation Checker</h2>
-    <div id="countdown">Loading...</div>
-    <button onclick="openPopup()">📥 Confirm Reservation</button>
+    <div class="hero-content-box">
+      <h1>The SheDiamond August Edition</h1>
+      <h2>Invitation Checker</h2>
+      <div id="countdown">Loading...</div>
+      <button onclick="openPopup()">📥 Confirm Reservation</button>
+    </div>
   </section>
 
   <!-- EVENT INFO SECTION -->
@@ -321,15 +308,16 @@
   <div class="popup" id="popup">
     <div class="popup-content">
       <span class="close-btn" onclick="closePopup()">✖</span>
-      <h3>Enter Your Phone Number</h3>
-      <input type="text" id="phoneInput" placeholder="e.g. 08012345678" />
-      <button onclick="checkInvite()">Check</button>
+      <div id="inputGroup">
+        <h3>Enter Your Phone Number</h3>
+        <input type="text" id="phoneInput" placeholder="e.g. 08012345678" />
+        <button onclick="checkInvite()">Check</button>
+      </div>
       <div class="loader" id="loader"></div>
       <div class="result-box" id="resultBox"></div>
     </div>
   </div>
 
-  <!-- JS -->
   <script>
     function toggleMenu() {
       document.getElementById("mobileMenu").classList.toggle("active");
@@ -344,6 +332,7 @@
       document.getElementById("loader").style.display = "none";
       document.getElementById("phoneInput").value = "";
       document.getElementById("resultBox").innerHTML = "";
+      document.getElementById("inputGroup").style.display = "block";
     }
 
     async function checkInvite() {
@@ -360,6 +349,7 @@
       setTimeout(() => {
         loader.style.display = "none";
         resultBox.style.display = "block";
+        document.getElementById("inputGroup").style.display = "none";
 
         if (data[phone]) {
           resultBox.innerHTML = `
@@ -376,7 +366,7 @@
             <a href="https://wa.me/2348145138382?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list." class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
           `;
         }
-      }, 3500);
+      }, 3000);
     }
 
     const countdownEl = document.getElementById("countdown");
@@ -391,15 +381,6 @@
       const s = Math.floor((diff % (1000 * 60)) / 1000);
       countdownEl.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
     }, 1000);
-
-    // Reveal sections on scroll
-    const sections = document.querySelectorAll("section");
-    window.addEventListener("scroll", () => {
-      sections.forEach(sec => {
-        const top = window.scrollY + window.innerHeight - 100;
-        if (top > sec.offsetTop) sec.classList.add("active");
-      });
-    });
   </script>
 </body>
 </html>
