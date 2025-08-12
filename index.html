@@ -1,397 +1,574 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SheDiamond Invitation Checker</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      font-family: 'Montserrat', sans-serif;
-      overflow-x: hidden;
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
     }
-
+    body, html {
+      font-family: 'Montserrat', sans-serif;
+      background: #070223;
+      color: white;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      height: 100%;
+    }
+    a {
+      color: #25D366;
+      text-decoration: none;
+    }
+    a:hover, a:focus {
+      text-decoration: underline;
+    }
     /* NAVIGATION */
     nav {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      z-index: 999;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-    }
-
-    nav img { height: 40px; }
-
-    nav ul {
-      display: flex;
-      gap: 1.2rem;
-      list-style: none;
-    }
-
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: bold;
-    }
-
-    .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 60px; right: 10px;
-      background: rgba(0,0,0,0.95);
-      padding: 1.5rem;
-      border-radius: 12px;
-    }
-
-    .mobile-menu a {
-      display: block;
-      margin-bottom: 1rem;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    /* HERO SECTION */
-    .hero {
-      background: url('background.jpg') center center no-repeat;
-      background-size: cover;
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
-      text-align: center;
-    }
-
-    .hero-content-box {
-  background: rgba(0, 0, 0, 0.75); /* darker neon */
-  padding: 2.5rem;
-  border-radius: 20px;
-  max-width: 90%;
-  box-shadow: 0 0 25px rgba(214, 51, 132, 0.3);
-  backdrop-filter: blur(8px);
-}
-
-    }
-
-    .hero h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.8rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero h2 {
-      font-size: 1.1rem;
-      font-weight: 400;
-      margin-bottom: 1rem;
-    }
-
-    #countdown {
-      background: rgba(255, 255, 255, 0.2);
+      top: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(6px);
       padding: 12px 24px;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 1rem;
-      animation: breathe 4s ease-in-out infinite;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1100;
     }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
+    nav img {
+      height: 40px;
+      filter: drop-shadow(0 0 8px #ff0099);
+      user-select: none;
     }
-
-    .hero button {
-      background: #d63384;
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav ul li a {
+      font-weight: 700;
+      font-size: 0.95rem;
       color: white;
-      padding: 12px 28px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 1rem;
+      transition: color 0.25s ease;
+    }
+    nav ul li a:hover, nav ul li a:focus {
+      color: #ff33bb;
     }
 
-    .event-info {
-      background: #fef6f2;
-      color: #3b3b3b;
-      text-align: center;
-      padding: 4rem 1.5rem;
-    }
-
-    .event-info h2,
-    .mission h2 {
-      color: #d63384;
-      font-size: 1.6rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .event-info p,
-    .mission p {
-      font-size: 1.05rem;
-      line-height: 2;
-    }
-
-    .mission {
-      background: #072235;
-      color: #fff;
-      text-align: center;
-      padding: 4rem 1.5rem;
-    }
-
-    .mission img {
-      margin-top: 2rem;
-      border-radius: 16px;
-      max-width: 90%;
-    }
-
-    /* POPUP */
-    .popup {
+    /* CENTER LOGO ANIMATION CONTAINER */
+    #logoAnimation {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      display: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1500;
+      pointer-events: none;
+      user-select: none;
+      animation: logoZoomBreatheFade 3.3s ease forwards;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #logoAnimation img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 25px #ff33aa);
+    }
+
+    @keyframes logoZoomBreatheFade {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.7);
+        filter: drop-shadow(0 0 0 #ff00a5);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+        filter: drop-shadow(0 0 30px #ff33aa);
+      }
+      70% {
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.3);
+        filter: drop-shadow(0 0 0 #ff00a5);
+      }
+    }
+
+    /* BUBBLES BACKGROUND */
+    .bubbles {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,0,150,0.15);
+      box-shadow: 0 0 10px rgba(255,0,150,0.7);
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      opacity: 0.6;
+      filter: drop-shadow(0 0 5px #ff33aa);
+    }
+    .bubble.small {
+      width: 10px;
+      height: 10px;
+      animation-name: floatUpDown;
+      animation-duration: 8s;
+    }
+    .bubble.medium {
+      width: 18px;
+      height: 18px;
+      animation-name: floatUpDown;
+      animation-duration: 11s;
+      animation-delay: 3s;
+    }
+    .bubble.large {
+      width: 28px;
+      height: 28px;
+      animation-name: floatUpDown;
+      animation-duration: 14s;
+      animation-delay: 6s;
+    }
+    @keyframes floatUpDown {
+      0%, 100% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(-20px); opacity: 1; }
+    }
+
+    /* SECTIONS */
+    section {
+      min-height: 100vh;
+      padding: 140px 24px 60px; /* padding-top for nav */
+      display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
+      text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
-    .popup-content {
-  background: #fff;
-  padding: 2.5rem;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  color: #333;
-  animation: fadeInZoom 0.5s ease;
-  position: relative;
-  max-height: 85vh;         /* Limit popup height */
-  overflow-y: auto;         /* Enable scroll inside */
-}
-
-    @keyframes fadeInZoom {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+    /* HERO */
+    .hero {
+      background: url('flyer.jpg') center center no-repeat fixed;
+      background-size: cover;
+      color: #fff;
+      text-shadow: 0 0 10px #ff00aa;
+      user-select: none;
     }
-
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 20px;
-      color: #999;
-      cursor: pointer;
-    }
-
-    .popup-content input {
+    /* Invitation checker container */
+    .invitation-checker-box {
+      background: rgba(255 255 255 / 0.12);
+      max-width: 420px;
       width: 100%;
-      padding: 14px;
-      margin-top: 1rem;
-      font-size: 15px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      border-radius: 24px;
+      padding: 2.2rem 2rem 2rem;
+      box-shadow:
+        0 0 24px 6px rgba(255, 0, 150, 0.8),
+        inset 0 0 28px 6px rgba(255, 0, 150, 0.3);
+      backdrop-filter: blur(22px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+      margin: 0 auto;
     }
-
-    .popup-content button {
-      margin-top: 1rem;
+    .invitation-checker-box h1 {
+      font-weight: 900;
+      font-size: 2.4rem;
+      text-shadow: 0 0 20px #ff00aa;
+      margin-bottom: 0;
+    }
+    .invitation-checker-box h2 {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-top: -4px;
+      color: #ff77bb;
+      text-shadow: 0 0 15px #ff33aa;
+    }
+    #countdown {
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 10px 30px;
+      border-radius: 9999px;
+      background: rgba(255 0 150 / 0.4);
+      user-select: none;
+      box-shadow: 0 0 18px #ff0099;
+      width: fit-content;
+      margin-top: 0;
+    }
+    /* input & button stacked */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       width: 100%;
-      padding: 12px;
-      background: #d63384;
-      color: white;
-      font-size: 15px;
+    }
+    input[type="text"] {
+      padding: 14px 18px;
+      font-size: 1.25rem;
+      border-radius: 14px;
       border: none;
-      border-radius: 6px;
+      outline: none;
+      background: rgba(255 255 255 / 0.18);
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 1.2px;
+      caret-color: #ff66cc;
+      width: 100%;
+    }
+    input[type="text"]::placeholder {
+      color: #ff99cc;
+      font-weight: 500;
+      letter-spacing: 0.9px;
+    }
+    input[type="text"]:focus {
+      background: rgba(255 255 255 / 0.35);
+      box-shadow: 0 0 18px 3px #ff0099;
+    }
+    button.check-btn {
+      background: linear-gradient(45deg, #ff00a5, #ff6cc1);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 14px 0;
+      cursor: pointer;
+      box-shadow: 0 0 18px #ff00a5;
+      transition: all 0.3s ease;
+      user-select: none;
+      width: 100%;
+    }
+    button.check-btn:hover {
+      background: linear-gradient(45deg, #ff6cc1, #ff00a5);
+      box-shadow: 0 0 26px 8px #ff33b3;
+      transform: scale(1.07);
+    }
+    button.check-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 14px #ff007f;
     }
 
-    .loader {
-      margin: 1.2rem auto;
-      width: 30px; height: 30px;
-      border: 3px solid #ccc;
-      border-top: 3px solid #d63384;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      display: none;
+    /* Result */
+    #resultBox {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 0.8rem;
+      color: #fff;
+      text-shadow: 0 0 18px #ff33aa;
+      min-height: 84px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      width: 100%;
+      text-align: center;
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0); }
-      100% { transform: rotate(360deg); }
+    #resultBox.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
-
-    .result-box {
-      margin-top: 1rem;
-      display: none;
+    #resultBox.error {
+      color: #ff5555;
+      text-shadow: none;
+      font-weight: 700;
     }
-
-    .result-box h4 {
-      color: #d63384;
-      margin-bottom: 0.7rem;
-    }
-
-    .result-box p {
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .whatsapp-btn {
-      margin-top: 1rem;
+    #resultBox a.whatsapp-btn {
       display: inline-block;
+      margin-top: 12px;
       background: #25D366;
       color: white;
-      padding: 10px 16px;
-      border-radius: 8px;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1rem;
       text-decoration: none;
-      font-weight: bold;
+      box-shadow: 0 0 14px #25D366;
+    }
+    #resultBox a.whatsapp-btn:hover {
+      box-shadow: 0 0 28px 8px #25D366;
     }
 
-    @media (max-width: 768px) {
-      nav ul { display: none; }
-      .menu-toggle { display: block; }
-      .mobile-menu.active { display: block; }
+    /* EVENT INFO and MISSION */
+    .event-info,
+    .mission {
+      max-width: 100vw;
+      padding-left: 4vw;
+      padding-right: 4vw;
+      background: rgba(255 255 255 / 0.12);
+      box-shadow:
+        0 0 18px 6px rgba(255, 0, 150, 0.4),
+        inset 0 0 20px 4px rgba(255, 0, 150, 0.3);
+      border-radius: 24px;
+      color: white;
+      user-select: none;
+    }
+    .event-info {
+      color: #3b3b3b;
+      background: rgba(255 246 242 / 0.75);
+      box-shadow: none;
+      border-radius: 24px;
+      max-width: 95vw;
+      margin: 0 auto 2rem;
+      padding: 4rem 3rem;
+      text-align: center;
+    }
+    .event-info h2 {
+      color: #d63384;
+      font-size: 1.8rem;
+      margin-bottom: 1.6rem;
+      font-weight: 700;
+    }
+    .event-info p {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      max-width: 420px;
+      margin: 0 auto 0.9rem;
+    }
+    .mission {
+      padding: 4rem 3rem 5rem;
+      margin: 0 auto 2rem;
+      max-width: 95vw;
+      color: white;
+      background: rgba(7,34,53,0.8);
+      text-align: center;
+      box-shadow:
+        0 0 24px 6px rgba(255, 0, 150, 0.6),
+        inset 0 0 28px 6px rgba(255, 0, 150, 0.3);
+      border-radius: 24px;
+    }
+    .mission h2 {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #ff33aa;
+      margin-bottom: 1.6rem;
+    }
+    .mission p {
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+    .mission img {
+      margin-top: 2rem;
+      max-width: 90%;
+      border-radius: 14px;
+      filter: drop-shadow(0 0 18px #ff33aa);
+      user-select: none;
+    }
+
+    /* Fade in container after logo animation */
+    main {
+      opacity: 0;
+      animation: fadeInMain 1s ease forwards;
+      animation-delay: 3.3s;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-top: 60px; /* enough so nav doesn't overlap */
+      z-index: 10;
+      position: relative;
+    }
+    @keyframes fadeInMain {
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      nav ul {
+        gap: 1rem;
+      }
+      .invitation-checker-box h1 {
+        font-size: 1.9rem;
+      }
+      .invitation-checker-box h2 {
+        font-size: 1rem;
+      }
+      #countdown {
+        font-size: 0.9rem;
+        padding: 8px 24px;
+      }
+      input[type="text"] {
+        font-size: 1.1rem;
+        padding: 12px 14px;
+      }
+      button.check-btn {
+        font-size: 1rem;
+        padding: 12px 0;
+      }
+      .event-info p, .mission p {
+        font-size: 1rem;
+      }
+      .event-info, .mission {
+        padding-left: 2vw;
+        padding-right: 2vw;
+        max-width: 98vw;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAVIGATION -->
-  <nav>
-    <img src="logo.png" alt="SheDiamond Logo" />
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+  <!-- Centered animated logo -->
+  <div id="logoAnimation" aria-hidden="true">
+    <img src="logo-big.png" alt="SheDiamond Logo" />
+  </div>
+
+  <nav role="navigation" aria-label="Main navigation">
+    <img src="logo-small.png" alt="SheDiamond Small Logo" />
     <ul>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="#event">Event Info</a></li>
-      <li><a href="#mission">Mission</a></li>
+      <li><a href="#home" tabindex="0">Home</a></li>
+      <li><a href="#event" tabindex="0">Event Info</a></li>
+      <li><a href="#mission" tabindex="0">Mission</a></li>
     </ul>
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="gallery.html">Gallery</a>
-      <a href="#event">Event Info</a>
-      <a href="#mission">Mission</a>
-    </div>
   </nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero" id="home">
-    <div class="hero-content-box">
-      <h1>CHECK YOUR INVITATION STATUS</h1>
-      <div id="countdown">Loading...</div>
-      <button onclick="openPopup()"> Click To Confirm  Reservation</button>
-    </div>
-  </section>
+  <div class="bubbles" aria-hidden="true"></div>
 
-  <!-- EVENT INFO SECTION -->
-  <section class="event-info" id="event">
-    <h2>Join Us As We Transform And Raise Diamonds</h2>
-    <p>📅 Date: Saturday, 2nd August 2025</p>
-    <p>⏰ Time: 10:30 AM</p>
-    <p>📍 Location: Ground Floor Hall, St. Leo Catholic Church, Toyin Street, Ikeja, Lagos</p>
-  </section>
-
-  <!-- MISSION SECTION -->
-  <section class="mission" id="mission">
-    <h2>Our Mission</h2>
-    <p>
-      To raise 5,000 women to be financially free in Nigeria.<br>
-      If you received an invitation, God is bringing you here for a reason.</p>
-      
-    </p>
-    <img src="mission.jpg" alt="Mission Visual" />
-  </section>
-
-  <!-- POPUP -->
-  <div class="popup" id="popup">
-    <div class="popup-content">
-      <span class="close-btn" onclick="closePopup()">✖</span>
-      <div id="inputGroup">
-        <h3>Enter Your Phone Number</h3>
-        <input type="text" id="phoneInput" placeholder="e.g. 08012345678" />
-        <button onclick="checkInvite()">Check</button>
+  <main>
+    <section class="hero" id="home" aria-label="Home - Invitation Checker">
+      <div class="invitation-checker-box" role="form" aria-label="Invitation checker form">
+        <h1>SheDiamond August Edition</h1>
+        <h2>Invitation Checker</h2>
+        <div id="countdown" aria-live="polite" aria-atomic="true" aria-relevant="text">Loading countdown...</div>
+        <div class="input-group">
+          <input
+            id="phoneInput"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            placeholder="Enter phone number (e.g. 08012345678)"
+            aria-required="true"
+            aria-describedby="resultBox"
+            maxlength="11"
+            autocomplete="tel"
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+          />
+          <button class="check-btn" onclick="checkInvite()" aria-label="Check invitation">Check</button>
+        </div>
+        <div id="resultBox" role="alert" aria-live="assertive" aria-atomic="true"></div>
       </div>
-      <div class="loader" id="loader"></div>
-      <div class="result-box" id="resultBox"></div>
-    </div>
-  </div>
+    </section>
+
+    <section class="event-info" id="event" aria-label="Event Information">
+      <h2>Join Us As We Transform And Raise Diamonds</h2>
+      <p>📅 Date: Saturday, 2nd August 2025</p>
+      <p>⏰ Time: 10:00 AM</p>
+      <p>📍 Location: Ground Floor Hall, St. Leo Catholic Church, Toyin Street, Ikeja, Lagos</p>
+    </section>
+
+    <section class="mission" id="mission" aria-label="Our Mission">
+      <h2>Our Mission</h2>
+      <p>
+        To raise 5,000 women to be financially free in Nigeria.<br />
+        If you received an invitation, God is bringing you here for a reason.<br />
+        If you received a reservation — don’t waste it.
+      </p>
+      <img src="mission.jpg" alt="Mission Visual" />
+    </section>
+  </main>
 
   <script>
-    function toggleMenu() {
-      document.getElementById("mobileMenu").classList.toggle("active");
+    // Bubble generation
+    const bubblesContainer = document.querySelector('.bubbles');
+    const bubbleCount = 25;
+
+    for (let i = 0; i < bubbleCount; i++) {
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      const sizeClass = i % 3 === 0 ? 'large' : (i % 3 === 1 ? 'medium' : 'small');
+      bubble.classList.add(sizeClass);
+      bubble.style.top = Math.random() * 100 + '%';
+      bubble.style.left = Math.random() * 100 + '%';
+      bubble.style.animationDelay = (Math.random() * 14) + 's';
+      bubble.style.animationDuration = (8 + Math.random() * 7) + 's';
+      bubblesContainer.appendChild(bubble);
     }
 
-    function openPopup() {
-  document.getElementById("popup").style.display = "flex";
-  document.body.style.overflow = 'hidden';  // Lock background
-}
+    // Logo animation fades out after 3.3s and then reveal main content
+    const logoAnimation = document.getElementById('logoAnimation');
+    const mainContent = document.querySelector('main');
 
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("phoneInput").value = "";
-  document.getElementById("resultBox").innerHTML = "";
-  document.getElementById("inputGroup").style.display = "block";
-  document.body.style.overflow = 'auto';    // Unlock background
-}
+    setTimeout(() => {
+      logoAnimation.style.opacity = 0;
+      logoAnimation.style.pointerEvents = 'none';
+    }, 3300);
 
-    async function checkInvite() {
-      const phone = document.getElementById("phoneInput").value.trim();
-      const loader = document.getElementById("loader");
-      const resultBox = document.getElementById("resultBox");
-
-      loader.style.display = "block";
-      resultBox.innerHTML = "";
-      resultBox.style.display = "none";
-
-      const data = await fetch("list.json?" + Date.now()).then(res => res.json());
-
-      setTimeout(() => {
-        loader.style.display = "none";
-        resultBox.style.display = "block";
-        document.getElementById("inputGroup").style.display = "none";
-
-        if (data[phone]) {
-          resultBox.innerHTML = `
-  <div style="background: #f8f0f5; padding: 1.8rem; border-radius: 16px; box-shadow: 0 0 20px rgba(214, 51, 132, 0.2); text-align: center;">
-    <h4 style="color: #d63384; font-size: 22px; margin-bottom: 1rem;">🎉 Congratulations ${data[phone]}!</h4>
-    <p style="font-size: 15px; line-height: 1.8; color: #444;">
-      You’ve been selected to attend the <strong>SheDiamond August Edition</strong>.<br><br>
-      Your reservation <strong style="color: #238636;">821/OI/CAE/LOA/1513</strong> was sent to<br><strong style="color: #d63384;">${phone}</strong> via SMS.<br><br>
-      Present this or the SMS at the reception to be allowed in.
-    </p>
-    <a href="https://wa.me/2348087136317?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank" style="margin-top: 1.5rem; display: inline-block;">💬 Acknowledge</a>
-  </div>
-`;
-        } else {
-          resultBox.innerHTML = `
-            <p style="color:red;">❌ Your Invitation not found.</p>
-            <p>Please contact Admin immediately.</p>
-            <a href="https://wa.me/2348087136317?text=Hello%20Admin%2C%20I%20am%20in%20Lagos%20and%20I%20really%20want%20to%20be%20at%20this%20event%20but%20my%20name%20is%20not%20on%20the%20list." class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
-          `;
-        }
-      }, 3000);
-    }
-
+    // Countdown
     const countdownEl = document.getElementById("countdown");
-    const eventDate = new Date("August 2, 2025 10:30:00").getTime();
-
+    const eventDate = new Date("August 2, 2025 10:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
       const diff = eventDate - now;
+      if (diff <= 0) {
+        countdownEl.innerText = "Event Started!";
+        return;
+      }
       const d = Math.floor(diff / (1000 * 60 * 60 * 24));
       const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const s = Math.floor((diff % (1000 * 60)) / 1000);
       countdownEl.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
     }, 1000);
+
+    // Invitation check
+    async function checkInvite() {
+      const phoneInput = document.getElementById('phoneInput');
+      const resultBox = document.getElementById('resultBox');
+      const phone = phoneInput.value.trim();
+
+      resultBox.className = '';
+      resultBox.textContent = '';
+      resultBox.classList.remove('visible');
+
+      if (phone.length !== 11) {
+        resultBox.classList.add('error', 'visible');
+        resultBox.textContent = 'Please enter an 11-digit phone number.';
+        return;
+      }
+
+      try {
+        const data = await fetch('list.json?' + Date.now()).then(res => res.json());
+
+        if (data[phone]) {
+          const rec = data[phone];
+          resultBox.innerHTML = `
+            <h3 style="color:#ff33aa;">🎉 Congratulations ${rec.name}!</h3>
+            <p>You’ve been selected to attend <strong>The SheDiamond August Edition Event</strong>.</p>
+            <p style="font-style: italic; font-weight: bold; color: #ff66cc;">
+              Holding this Saturday, 2nd Aug, 2025 @ Ground Floor Hall, St. Leo Catholic Church, Ikeja, Lagos at 10:00 AM
+            </p>
+            <p>Your Reservation Code: <strong style="color:#ff006e;">${rec.reservation}</strong></p>
+            <p>Kindly take a screenshot and present this at the reception to get your ticket.</p>
+            <a href="https://wa.me/${rec.adminNumber}?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" 
+               class="whatsapp-btn" target="_blank" rel="noopener noreferrer">
+              💬 Chat Admin
+            </a>
+          `;
+        } else {
+          resultBox.classList.add('error');
+          resultBox.textContent = "❌ Invitation not found. Please check your number or contact your group admin.";
+        }
+        resultBox.classList.add('visible');
+      } catch (error) {
+        resultBox.classList.add('error');
+        resultBox.textContent = "Error loading invitation data. Please try again later.";
+        resultBox.classList.add('visible');
+        console.error(error);
+      }
+    }
   </script>
 </body>
 </html>
