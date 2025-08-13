@@ -138,29 +138,72 @@
 
 </style>
 </head>
+</head>
 <body>
 
-<!-- Opening Logo -->
-<img src="logo.png" id="openingLogo" alt="SheDiamond Logo" />
+  <!-- Opening Logo -->
+  <img src="logo.png" id="openingLogo" alt="SheDiamond Logo" />
 
-<!-- Stars container -->
-<div id="stars"></div>
+  <!-- Main Content hidden initially -->
+  <div id="mainContent" style="display:none;">
 
-<!-- NAVIGATION -->
-<nav>
-  <img src="logo_nav.png" alt="SheDiamond Logo" />
-  <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-  <ul>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#event">Event Info</a></li>
-    <li><a href="#mission">Mission</a></li>
-  </ul>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#home">Home</a>
-    <a href="#event">Event Info</a>
-    <a href="#mission">Mission</a>
-  </div>
-</nav>
+    <!-- Stars container -->
+    <div id="stars"></div>
+
+    <!-- NAVIGATION -->
+    <nav>
+      <img src="logo_nav.png" alt="SheDiamond Logo" />
+      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#event">Event Info</a></li>
+        <li><a href="#mission">Mission</a></li>
+      </ul>
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="#home">Home</a>
+        <a href="#event">Event Info</a>
+        <a href="#mission">Mission</a>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="home">
+      <div class="hero-box" id="heroBox">
+        <h1>SheDiamond August Edition</h1>
+        <h2>Invitation Checker</h2>
+        <div id="countdown">Loading...</div>
+        <input type="tel" id="phoneInput" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric" />
+        <button onclick="checkInvite()">Check</button>
+        <div class="loader" id="loader"></div>
+      </div>
+    </section>
+
+    <!-- EVENT INFO SECTION -->
+    <section class="event-info" id="event">
+      <!-- Event info content here -->
+    </section>
+
+    <!-- MISSION SECTION -->
+    <section class="mission" id="mission">
+      <!-- Mission content here -->
+    </section>
+
+    <!-- POPUP -->
+    <div class="popup" id="popup">
+      <div class="popup-content" id="popupContent"></div>
+    </div>
+
+  </div> <!-- End of mainContent -->
+
+  <script>
+    // Hide opening logo and show main content after 3.3s
+    setTimeout(()=>{
+      document.getElementById('openingLogo').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+    }, 3300);
+  </script>
+
+</body>
 
 <!-- HERO SECTION -->
 <section class="hero" id="home">
