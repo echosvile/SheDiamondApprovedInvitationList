@@ -4,18 +4,16 @@
     "reservation": "821/OI.CAE/4708",
     "adminNumber": "07034174708"
   },
-  "08130200512": {
-    "name": "Global Amb. Onyi",
-    "reservation": "821/OI/0512",
-    "adminNumber": "08130200512"
+  "08012345678": {
+    "name": "John Doe",
+    "reservation": "RES123",
+    "adminNumber": "08087654321"
   },
-  "08035473023": {
-    "name": "Olabisi",
-    "reservation": "SHD-003",
-    "adminNumber": "08025327714"
-  },
-  "09064182257": {
-    "name": "Kingsley",
-    "reservation": "SHD-004",
-    "adminNumber": "09136945314"
+  "08023456789": {
+    "name": "Jane Smith",
+    "reservation": "RES456",
+    "adminNumber": "08087654321"
   }
+}
+
+
