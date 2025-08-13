@@ -24,10 +24,22 @@
   .hero-box.active { opacity:1; transform:translateY(0); }
   .hero-box h1,h2 { color:white; margin-bottom:0.5rem; }
 
-  /* Countdown scroll */
-  #countdown { display:flex; gap:10px; font-size:1.5rem; color:white; margin-bottom:1rem; }
-  .count-unit { position: relative; height:2em; overflow:hidden; width:3em; }
-  .count-unit span { display:block; height:2em; line-height:2em; text-align:center; color:white; }
+  /* Countdown */
+  #countdown { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:0.5rem; }
+  .count-unit { display:flex; flex-direction:column; align-items:center; width:3em; }
+  .count-unit .number {
+    display:block; height:2em; line-height:2em; text-align:center; color:white;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+  }
+  .unit-label { font-size:0.7rem; color:white; margin-top:4px; text-shadow:0 0 4px rgba(255,255,255,0.5); animation: heartbeat 2s infinite; }
+  #toGo { display:block; font-size:1rem; color:white; margin-top:8px; text-shadow:0 0 6px rgba(255,255,255,0.7); animation: heartbeat 2s infinite; }
+
+  /* Heartbeat effect */
+  @keyframes heartbeat {
+    0%,100%{transform:scale(1);}
+    25%,75%{transform:scale(1.08);}
+    50%{transform:scale(1);}
+  }
 
   .hero-box input { margin-top:1rem; padding:12px; font-size:1rem; border-radius:8px; border:none; width:100%; outline:none; }
   .hero-box button { margin-top:1rem; padding:12px 20px; background:#d63384; color:white; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
@@ -72,7 +84,11 @@
       <div class="hero-box" id="heroBox">
         <h1>SheDiamond August Edition</h1>
         <h2>Invitation Checker</h2>
+
+        <!-- Countdown -->
         <div id="countdown"></div>
+        <span id="toGo">TO GO!</span>
+
         <input type="tel" id="phoneInput" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric" />
         <button onclick="checkInvite()">Check</button>
         <div class="loader" id="loader"></div>
@@ -107,36 +123,55 @@
     if(heroBox) setTimeout(()=>heroBox.classList.add('active'),200);
   },3300);
 
-  // Countdown scroll
+  // Countdown
   const countdownEl=document.getElementById('countdown');
   const eventDate=new Date("August 16, 2025 9:30:00").getTime();
   const units=['Days','Hours','Minutes','Seconds'];
   const spans={};
 
+  // Build countdown
   units.forEach(u=>{
-    const div=document.createElement('div'); div.className='count-unit';
-    div.style.height='2em'; div.style.overflow='hidden'; div.style.position='relative'; div.style.width='3em';
-    const spanContainer=document.createElement('div'); spanContainer.style.position='absolute'; spanContainer.style.top='0'; spanContainer.style.transition='transform 0.5s ease';
-    for(let i=0;i<100;i++){
-      const span=document.createElement('span'); span.style.display='block'; span.style.height='2em'; span.style.lineHeight='2em';
-      span.style.textAlign='center'; span.style.color='white'; span.innerText=i;
-      spanContainer.appendChild(span);
-    }
-    div.appendChild(spanContainer); countdownEl.appendChild(div);
-    spans[u]=spanContainer;
+    const div=document.createElement('div');
+    div.className='count-unit';
+
+    const span=document.createElement('span');
+    span.className='number';
+    span.innerText='0';
+    div.appendChild(span);
+
+    const label=document.createElement('span');
+    label.className='unit-label';
+    label.innerText=u;
+    div.appendChild(label);
+
+    countdownEl.appendChild(div);
+    spans[u]=span;
   });
 
   function updateCountdown(){
     const now=new Date().getTime();
     let diff=eventDate-now; if(diff<0) diff=0;
+
     const d=Math.floor(diff/(1000*60*60*24));
     const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
     const m=Math.floor((diff%(1000*60*60))/(1000*60));
     const s=Math.floor((diff%(1000*60))/1000);
-    spans['Days'].style.transform=`translateY(-${d*2}em)`;
-    spans['Hours'].style.transform=`translateY(-${h*2}em)`;
-    spans['Minutes'].style.transform=`translateY(-${m*2}em)`;
-    spans['Seconds'].style.transform=`translateY(-${s*2}em)`;
+
+    const values=[d,h,m,s];
+
+    units.forEach((unit,i)=>{
+      const span=spans[unit];
+      if(span.innerText!=values[i]){
+        span.innerText=values[i];
+        // Glow + heartbeat
+        span.style.textShadow='0 0 12px rgba(255,255,255,0.8)';
+        span.style.transform='scale(1.1)';
+        setTimeout(()=>{
+          span.style.textShadow='0 0 0px rgba(255,255,255,0)';
+          span.style.transform='scale(1)';
+        },300);
+      }
+    });
   }
   setInterval(updateCountdown,1000);
   updateCountdown();
