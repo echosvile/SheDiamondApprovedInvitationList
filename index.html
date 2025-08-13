@@ -24,22 +24,41 @@
   .hero-box.active { opacity:1; transform:translateY(0); }
   .hero-box h1,h2 { color:white; margin-bottom:0.5rem; }
 
-  /* Countdown */
-  #countdown { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:0.5rem; }
-  .count-unit { display:flex; flex-direction:column; align-items:center; width:3em; }
-  .count-unit .number {
-    display:block; height:2em; line-height:2em; text-align:center; color:white;
-    transition: transform 0.3s ease, text-shadow 0.3s ease;
-  }
-  .unit-label { font-size:0.7rem; color:white; margin-top:4px; text-shadow:0 0 4px rgba(255,255,255,0.5); animation: heartbeat 2s infinite; }
-  #toGo { display:block; font-size:1rem; color:white; margin-top:8px; text-shadow:0 0 6px rgba(255,255,255,0.7); animation: heartbeat 2s infinite; }
+/* Countdown */
+#countdown { display:flex; gap:10px; justify-content:center; align-items:center; margin-bottom:0.5rem; }
+.count-unit { display:flex; flex-direction:column; align-items:center; width:3em; }
 
-  /* Heartbeat effect */
-  @keyframes heartbeat {
-    0%,100%{transform:scale(1);}
-    25%,75%{transform:scale(1.08);}
-    50%{transform:scale(1);}
-  }
+/* Numbers with heartbeat */
+.count-unit .number {
+  display:block; height:2em; line-height:2em; text-align:center; color:white;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+  animation: heartbeat 2s infinite;
+}
+
+/* Labels and TO GO glow only, no heartbeat */
+.unit-label {
+  font-size:0.7rem;
+  color:white;
+  margin-top:4px;
+  text-shadow:0 0 6px rgba(255,255,255,0.7);
+  animation: none !important;
+}
+
+#toGo {
+  display:block;
+  font-size:1rem;
+  color:white;
+  margin-top:8px;
+  text-shadow:0 0 8px rgba(255,255,255,0.9);
+  animation: none !important;
+}
+
+/* Heartbeat effect */
+@keyframes heartbeat {
+  0%,100%{transform:scale(1);}
+  25%,75%{transform:scale(1.08);}
+  50%{transform:scale(1);}
+}
 
   .hero-box input { margin-top:1rem; padding:12px; font-size:1rem; border-radius:8px; border:none; width:100%; outline:none; }
   .hero-box button { margin-top:1rem; padding:12px 20px; background:#d63384; color:white; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
