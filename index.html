@@ -213,41 +213,61 @@
   setInterval(()=>{ nextMission(); },3000);
 
   // Invitation check
-  async function checkInvite(){
-    const phone=document.getElementById("phoneInput").value.trim();
-    if(phone.length!==11){ alert("Enter valid 11-digit number"); return; }
-    const loader=document.getElementById("loader"); loader.style.display="block";
+  async function checkInvite() {
+  const phone = document.getElementById("phoneInput").value.trim();
+  const loader = document.getElementById("loader");
+  const popupContent = document.getElementById("popupContent");
+  const popup = document.getElementById("popup");
 
-    const res=await fetch('list.json?' + Date.now());
-    const data=await res.json();
-
-    setTimeout(()=>{
-      loader.style.display="none";
-      if(data[phone]){
-        const rec=data[phone];
-        showPopup(`
-          <h3>🎉 Congratulations ${rec.name}!</h3>
-          <p>You’ve been selected to attend <strong>The SheDiamond August Edition Event</strong>.</p>
-          <p style="font-style: italic; font-weight: bold; color: #ff66cc;">
-            Holding this Saturday, 2nd Aug, 2025 @ Ground Floor Hall, St. Leo Catholic Church, Ikeja, Lagos at 10:00 AM
-          </p>
-          <p>Your reservation code: <strong style="color:#ff006e;">${rec.reservation}</strong> has been sent to <strong>${phone}</strong>.</p>
-          <p>Kindly take a screenshot and present this at the reception to get your ticket.</p>
-          <a href="https://wa.me/${rec.adminNumber}?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
-          <button class="back-btn" onclick="closePopup()">Back</button>
-        `);
-      } else {
-        showPopup(`
-          <h3>😔 Invitation Not Found</h3>
-          <p>Please contact your group admin to confirm your reservation.</p>
-          <button class="back-btn" onclick="closePopup()">Back</button>
-        `);
-      }
-    },2000);
+  if (phone.length !== 11) {
+    alert("Enter a valid 11-digit number");
+    return;
   }
 
-  function showPopup(html){ const popup=document.getElementById("popup"); const content=document.getElementById("popupContent"); content.innerHTML=html; popup.style.display="flex"; }
-  function closePopup(){ document.getElementById("popup").style.display="none"; }
+  loader.style.display = "block";
+
+  // Fetch list.json
+  const data = await fetch("list.json?" + Date.now())
+    .then(res => res.json())
+    .catch(err => {
+      loader.style.display = "none";
+      alert("❌ Failed to load guest list.");
+      console.error(err);
+      return null;
+    });
+
+  loader.style.display = "none";
+
+  if (data && data[phone]) {
+    const rec = data[phone];
+
+    popupContent.innerHTML = `
+      <h3>🎉 Congratulations ${rec.name}!</h3>
+      <p>You’ve been selected to attend <strong>The SheDiamond August Edition Event</strong>.</p>
+      <p style="font-style: italic; font-weight: bold; color: #ff66cc;">
+        Holding this Saturday, 2nd Aug, 2025 @ Ground Floor Hall, St. Leo Catholic Church, Ikeja, Lagos at 10:00 AM
+      </p>
+      <p>Your reservation code: <strong style="color:#ff006e;">${rec.reservation}</strong> has been sent to <strong>${phone}</strong>.</p>
+      <p>Kindly take a screenshot and present this at the reception to get your ticket.</p>
+      <a href="https://wa.me/${rec.adminNumber}?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank">💬 Chat Admin</a>
+      <button class="back-btn" onclick="closePopup()">Back</button>
+    `;
+
+    popup.style.display = "flex";
+
+  } else {
+    popupContent.innerHTML = `
+      <h3>😔 Invitation Not Found</h3>
+      <p>Please contact your group admin to confirm your reservation.</p>
+      <button class="back-btn" onclick="closePopup()">Back</button>
+    `;
+    popup.style.display = "flex";
+  }
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
 
 </script>
 
