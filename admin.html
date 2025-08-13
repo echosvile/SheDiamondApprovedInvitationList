@@ -64,9 +64,9 @@
     margin-top: 1rem;
   }
   .logout-btn {
-    background: #dc3545;
+    background: #d9534f;
     color: white;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
   }
   .hidden {
     display: none;
@@ -95,7 +95,6 @@
 
 <!-- Main Admin Panel -->
 <div id="adminPanel" class="hidden" style="padding: 1rem; max-width: 500px; margin: auto;">
-  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
   <h2 id="welcomeText"></h2>
 
   <h3>Add Single Entry</h3>
@@ -110,6 +109,8 @@
   <input type="text" id="batchReservation" placeholder="Reservation Code for All">
   <input type="tel" id="batchAdminNumber" placeholder="Admin Phone for All" pattern="[0-9]*" inputmode="numeric" maxlength="11">
   <button onclick="addBatch()">Add Batch</button>
+
+  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
 </div>
 
 <script src="admin.js"></script>
