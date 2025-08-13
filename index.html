@@ -11,97 +11,140 @@
 
   /* NAVIGATION */
   nav {
-    position: fixed; top:0; left:0; width:100%; z-index:999;
-    display:flex; justify-content:space-between; align-items:center;
-    padding:10px 20px; background: rgba(0,0,0,0.5);
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.5);
   }
-  nav img { height:40px; }
-  nav ul { display:flex; gap:1.2rem; list-style:none; }
-  nav ul li a { color:white; text-decoration:none; font-weight:bold; }
-  .menu-toggle { display:none; color:white; font-size:1.5rem; cursor:pointer; }
-  .mobile-menu { display:none; position:fixed; top:60px; right:10px; background:rgba(0,0,0,0.95); padding:1.5rem; border-radius:12px; }
-  .mobile-menu a { display:block; margin-bottom:1rem; color:white; font-weight:bold; }
+  nav img { height: 40px; }
+  nav ul { display: flex; gap: 1.2rem; list-style: none; }
+  nav ul li a { color: white; text-decoration: none; font-weight: bold; }
+  .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+  .mobile-menu { display: none; position: fixed; top: 60px; right: 10px; background: rgba(0,0,0,0.95); padding: 1.5rem; border-radius: 12px; }
+  .mobile-menu a { display: block; margin-bottom: 1rem; color: white; font-weight: bold; }
 
-  /* SECTIONS */
+  /* SECTION BASE */
   section {
-    min-height:100vh; width:100%;
-    display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
-    position:relative;
+    min-height: 100vh;
+    padding: 5rem 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
   }
 
-  /* HERO */
+  /* HERO SECTION */
   .hero {
     background: url('background.jpg') center center no-repeat;
-    background-size: cover; position: relative; overflow: hidden;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
   }
   .hero::before {
-    content:'';
-    position:absolute; top:0; left:0; width:100%; height:100%;
+    content:''; position:absolute; top:0; left:0; width:100%; height:100%;
     background: rgba(0,0,0,0.3);
     z-index:1;
   }
   .hero-box {
-    position: relative; background: rgba(10,10,20,0.8);
-    padding:2rem; border-radius:16px;
-    box-shadow:0 0 15px rgba(255,255,0,0.3);
+    position: relative;
+    background: rgba(10,10,20,0.7);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(255,255,0,0.3);
     backdrop-filter: blur(10px);
-    display:flex; flex-direction:column; align-items:center;
-    max-width:400px; width:90%; z-index:2;
-    opacity:0; transform:translateY(20px); transition: all 1s ease;
+    display:flex; flex-direction: column; align-items:center;
+    max-width: 400px; width:90%;
+    z-index:2;
+    opacity:0;
+    transform: translateY(30px);
+    transition: all 1s ease;
   }
-  .hero-box.active { opacity:1; transform:translateY(0); }
-  .hero-box h1, .hero-box h2, #countdown { color:white; margin-bottom:1rem; }
-  .hero-box input { margin-top:1rem; padding:12px; font-size:1rem; border-radius:8px; border:none; width:100%; outline:none; }
+  .hero-box.active { opacity:1; transform: translateY(0); }
+  .hero-box h1, .hero-box h2, #countdown { color: white; margin-bottom: 0.5rem; }
+  .hero-box input { margin-top: 1rem; padding: 12px; font-size:1rem; border-radius:8px; border:none; width:100%; outline:none; }
   .hero-box button { margin-top:1rem; padding:12px 20px; background:#d63384; color:white; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
 
   /* EVENT INFO */
-  .event-info { background: rgba(10,30,60,0.7); color:white; width:100%; padding:5rem 1.5rem; }
+  .event-info { background: rgba(10,30,60,0.8); color:white; width:100%; padding:5rem 1.5rem; }
 
   /* MISSION */
-  .mission { background: rgba(50,0,60,0.7); color:white; width:100%; padding:5rem 1.5rem; }
+  .mission { background: rgba(50,0,60,0.8); color:white; width:100%; padding:5rem 1.5rem; }
   .mission img { max-width:80%; border-radius:16px; display:block; margin:2rem auto; transition: all 0.6s ease; }
-  .mission button { position:relative; padding:10px 16px; font-size:1.5rem; cursor:pointer; }
 
   /* POPUP */
-  .popup { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display: none; justify-content:center; align-items:center; z-index:1000; }
+  .popup {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.7); display: none;
+    justify-content: center; align-items: center; z-index:1000;
+    backdrop-filter: blur(5px);
+  }
   .popup-content {
-    background: rgba(10,10,20,0.95); border: 2px solid #ffcc00; padding: 2rem;
-    border-radius:16px; max-width:400px; width:90%; text-align:center; color:white;
-    animation: popupFade 0.5s ease forwards;
+    background: rgba(10,10,20,0.95);
+    border: 2px solid #ffcc00;
+    padding: 2rem;
+    border-radius:16px;
+    max-width:400px; width:90%;
+    text-align:center;
+    color:white;
+    animation: popupFade 0.6s ease forwards;
   }
   @keyframes popupFade { from { opacity:0; transform: scale(0.8); } to { opacity:1; transform: scale(1); } }
   .popup-content h3, .popup-content p { margin-bottom:1rem; }
-  .popup-content .whatsapp-btn, .popup-content button.back-btn { display:block; margin:0.5rem auto; padding:10px 16px; border:none; border-radius:8px; font-weight:bold; cursor:pointer; text-decoration:none; }
-  .popup-content .whatsapp-btn { background:#25D366; color:white; }
-  .popup-content button.back-btn { background:#555; color:white; }
+  .popup-content .whatsapp-btn {
+    display:inline-block; margin-top:0.5rem; padding:10px 16px;
+    background:#25D366; border-radius:8px; color:white;
+    text-decoration:none; font-weight:bold; font-size:1rem;
+  }
+  .popup-content button.back-btn {
+    margin-top:1rem; padding:10px 16px; border:none;
+    border-radius:8px; background:#555; color:white;
+    cursor:pointer; font-weight:bold;
+  }
 
   /* OPENING LOGO */
-  #openingLogo { position: fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(1); width:200px; height:200px; z-index:1500; animation: logoBreathe 3.3s ease forwards; }
-  @keyframes logoBreathe {
+  #openingLogo {
+    position: fixed; top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(0.5);
+    width:200px; height:200px;
+    z-index:1500;
+    animation: logoBreath 3.3s ease forwards;
+  }
+  @keyframes logoBreath {
     0%,100% { transform:translate(-50%,-50%) scale(0.8); opacity:0; }
-    30% { transform:translate(-50%,-50%) scale(1.05); opacity:1; }
-    60% { transform:translate(-50%,-50%) scale(1); opacity:1; }
+    25%,75% { transform:translate(-50%,-50%) scale(1.1); opacity:1; }
+    50% { transform:translate(-50%,-50%) scale(1); opacity:1; }
   }
 
   /* STARS */
-  #stars { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:hidden; }
   .star { position:absolute; width:2px; height:2px; background:white; border-radius:50%; opacity:0.8; animation: fall linear infinite; }
   @keyframes fall { 0% { transform: translateY(-10px); opacity:0.8; } 100% { transform: translateY(110vh); opacity:0; } }
 
   /* LOADER */
-  #loader { display:none; margin:1rem auto; border:4px solid #ccc; border-top:4px solid #d63384; border-radius:50%; width:30px; height:30px; animation: spin 1s linear infinite; }
-  @keyframes spin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
+  .loader {
+    border: 4px solid #ccc; border-top: 4px solid #d63384;
+    border-radius:50%; width:30px; height:30px;
+    animation: spin 1s linear infinite; margin:1rem auto; display:none;
+  }
+  @keyframes spin { 0%{transform:rotate(0);} 100%{transform:rotate(360deg);} }
 
-  @media (max-width:768px){ nav ul{display:none;} .menu-toggle{display:block;} .mobile-menu.active{display:block;} }
+  @media (max-width:768px) { nav ul { display:none; } .menu-toggle { display:block; } .mobile-menu.active { display:block; } }
+
 </style>
 </head>
 <body>
 
-<!-- Stars container -->
-<div id="stars"></div>
-
 <!-- Opening Logo -->
 <img src="logo.png" id="openingLogo" alt="SheDiamond Logo" />
+
+<!-- Stars container -->
+<div id="stars"></div>
 
 <!-- NAVIGATION -->
 <nav>
@@ -127,7 +170,7 @@
     <div id="countdown">Loading...</div>
     <input type="tel" id="phoneInput" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric" />
     <button onclick="checkInvite()">Check</button>
-    <div id="loader"></div>
+    <div class="loader" id="loader"></div>
   </div>
 </section>
 
@@ -147,7 +190,7 @@
      If you received a reservation — don’t waste it.</p>
   <img src="mission1.jpg" alt="Mission Image" id="missionImg" />
   <div>
-    <button onclick="prevMission()">&#8592;</button>
+    <button onclick="prevMission()" style="margin-right:10px;">&#8592;</button>
     <button onclick="nextMission()">&#8594;</button>
   </div>
 </section>
@@ -161,7 +204,7 @@
   // Toggle mobile menu
   function toggleMenu(){ document.getElementById("mobileMenu").classList.toggle("active"); }
 
-  // Countdown
+  // Countdown timer
   const countdownEl = document.getElementById("countdown");
   const eventDate = new Date("August 2, 2025 10:00:00").getTime();
   setInterval(() => {
@@ -176,39 +219,39 @@
 
   // Stars
   const starsContainer = document.getElementById("stars");
-  for(let i=0;i<120;i++){
-    const star=document.createElement('div'); star.classList.add('star');
-    star.style.left=Math.random()*100+'%';
+  for(let i=0;i<100;i++){
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = Math.random()*100+'%';
     star.style.animationDuration = 5+Math.random()*5+'s';
-    star.style.width=star.style.height=(1+Math.random()*2)+'px';
+    star.style.width = star.style.height = (1+Math.random()*2)+'px';
     starsContainer.appendChild(star);
   }
 
   // Mission images swipe
   const missionImages = ["mission1.jpg","mission2.jpg","mission3.jpg"];
-  let missionIndex=0;
-  const missionImgEl=document.getElementById("missionImg");
+  let missionIndex = 0;
+  const missionImgEl = document.getElementById("missionImg");
   function prevMission(){ missionIndex=(missionIndex-1+missionImages.length)%missionImages.length; missionImgEl.src=missionImages[missionIndex]; }
   function nextMission(){ missionIndex=(missionIndex+1)%missionImages.length; missionImgEl.src=missionImages[missionIndex]; }
-  setInterval(()=>{ nextMission(); },3000);
 
-  // Hero box fade in after logo animation
-  window.onload = ()=>{
-    setTimeout(()=>{ document.getElementById("openingLogo").style.display="none"; document.getElementById("heroBox").classList.add("active"); }, 3300);
-  };
+  // Hero Box Animation after opening logo
+  const heroBox = document.getElementById("heroBox");
+  setTimeout(()=>{ heroBox.classList.add("active"); document.getElementById("openingLogo").style.display="none"; }, 3300);
 
   // Invitation check
   async function checkInvite(){
     const phone = document.getElementById("phoneInput").value.trim();
+    const loader = document.getElementById("loader");
     if(phone.length!==11){ alert("Enter valid 11-digit number"); return; }
-    document.getElementById("loader").style.display="block";
+
+    loader.style.display="block";
     const res = await fetch('list.json?' + Date.now());
     const data = await res.json();
-    document.getElementById("loader").style.display="none";
 
     if(data[phone]){
       const rec = data[phone];
-      showPopup(`
+      setTimeout(()=>{ showPopup(`
         <h3>🎉 Congratulations ${rec.name}!</h3>
         <p>You’ve been selected to attend <strong>The SheDiamond August Edition Event</strong>.</p>
         <p style="font-style: italic; font-weight: bold; color: #ff66cc;">
@@ -216,14 +259,15 @@
         </p>
         <p>Your reservation code: <strong style="color:#ff006e;">${rec.reservation}</strong> has been sent to <strong>${phone}</strong>.</p>
         <p>Kindly take a screenshot of this page, show it to the reception at the event to get YOUR TICKET</p>
+        <a href="https://wa.me/${rec.adminNumber}?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">💬 Chat Admin</a>
         <button class="back-btn" onclick="closePopup()">Back</button>
-      `);
+      `); loader.style.display="none"; }, 1000);
     } else {
-      showPopup(`
+      setTimeout(()=>{ showPopup(`
         <h3>😔 Invitation Not Found</h3>
         <p>Please contact your group admin to confirm your reservation.</p>
         <button class="back-btn" onclick="closePopup()">Back</button>
-      `);
+      `); loader.style.display="none"; }, 1000);
     }
   }
 
