@@ -34,15 +34,39 @@ function goBack() {
 }
 
 // ======= Token Step =======
-function verifyToken() {
+async function verifyToken() {
   githubToken = document.getElementById("githubToken").value.trim();
   if (!githubToken) {
     alert("Enter GitHub token");
     return;
   }
+
+  // Validate GitHub token by making a real API request
+  try {
+    const testRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}`, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
+
+    if (!testRes.ok) {
+      alert("Invalid GitHub token");
+      return;
+    }
+  } catch (err) {
+    alert("Error validating GitHub token");
+    return;
+  }
+
+  // Save token and time in localStorage
+  localStorage.setItem("githubToken", githubToken);
+  localStorage.setItem("tokenTime", Date.now().toString());
+
   tokenPage.classList.add("hidden");
   adminPanel.classList.remove("hidden");
   document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName}`;
+
+  // Start countdown timer
+  const expireTime = Date.now() + (2 * 60 * 60 * 1000);
+  startTokenCountdown(expireTime);
 }
 
 // ======= GitHub Repo Info =======
@@ -52,9 +76,11 @@ const filePath = "list.json";
 
 // ======= Fetch Current List =======
 async function fetchList() {
+  const token = githubToken || localStorage.getItem("githubToken");
   const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?timestamp=${Date.now()}`, {
-    headers: { Authorization: `token ${githubToken}` }
+    headers: { Authorization: `token ${token}` }
   });
+  if (!res.ok) throw new Error("Failed to fetch list.json");
   const file = await res.json();
   const content = atob(file.content);
   return { data: JSON.parse(content), sha: file.sha };
@@ -62,10 +88,11 @@ async function fetchList() {
 
 // ======= Save Updated List =======
 async function saveList(newData, sha) {
+  const token = githubToken || localStorage.getItem("githubToken");
   const content = btoa(JSON.stringify(newData, null, 2));
   const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
     method: "PUT",
-    headers: { Authorization: `token ${githubToken}`, "Content-Type": "application/json" },
+    headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       message: "Update list.json via Admin Panel",
       content,
@@ -126,3 +153,55 @@ async function addBatch() {
 
   await saveList(data, sha);
 }
+
+// ======= Start Token Countdown =======
+function startTokenCountdown(expireTime) {
+  const timerEl = document.getElementById("timer");
+  function updateTimer() {
+    const now = Date.now();
+    const diff = expireTime - now;
+    if (diff <= 0) {
+      timerEl.innerText = "Session expired";
+      logoutAdmin();
+      return;
+    }
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+
+    if (diff <= 10 * 60 * 1000) {
+      timerEl.style.color = "red";
+    } else {
+      timerEl.style.color = "#ff6600";
+    }
+
+    timerEl.innerText = `Token expires in ${minutes}m ${seconds}s`;
+    setTimeout(updateTimer, 1000);
+  }
+  updateTimer();
+}
+
+// ======= Logout =======
+function logoutAdmin() {
+  localStorage.removeItem("githubToken");
+  localStorage.removeItem("tokenTime");
+  location.reload();
+}
+
+// ======= Auto-Login if Token Still Valid =======
+window.addEventListener("load", () => {
+  const savedToken = localStorage.getItem("githubToken");
+  const savedTime = localStorage.getItem("tokenTime");
+  if (savedToken && savedTime) {
+    const expireTime = parseInt(savedTime) + (2 * 60 * 60 * 1000);
+    if (Date.now() < expireTime) {
+      githubToken = savedToken;
+      loginPage.classList.add("hidden");
+      tokenPage.classList.add("hidden");
+      adminPanel.classList.remove("hidden");
+      document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName || "Admin"}`;
+      startTokenCountdown(expireTime);
+    } else {
+      logoutAdmin();
+    }
+  }
+});
