@@ -32,7 +32,7 @@
     margin-bottom: 1rem;
     color: #333;
   }
-  input {
+  input, textarea {
     width: 100%;
     padding: 12px;
     margin-bottom: 1rem;
@@ -63,8 +63,19 @@
     color: black;
     margin-top: 1rem;
   }
+  .logout-btn {
+    background: #ff4444;
+    color: white;
+    margin-bottom: 1rem;
+  }
   .hidden {
     display: none;
+  }
+  #timer {
+    font-weight: bold;
+    color: #ff6600;
+    margin-bottom: 10px;
+    display: block;
   }
 </style>
 </head>
@@ -90,6 +101,8 @@
 
 <!-- Main Admin Panel -->
 <div id="adminPanel" class="hidden" style="padding: 1rem; max-width: 500px; margin: auto;">
+  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+  <span id="timer"></span>
   <h2 id="welcomeText"></h2>
 
   <h3>Add Single Entry</h3>
@@ -107,5 +120,48 @@
 </div>
 
 <script src="admin.js"></script>
+
+<script>
+  function startTokenCountdown(expireTime) {
+    const timerEl = document.getElementById("timer");
+    function updateTimer() {
+      const now = Date.now();
+      const diff = expireTime - now;
+      if (diff <= 0) {
+        timerEl.innerText = "Session expired";
+        logoutAdmin();
+        return;
+      }
+      const minutes = Math.floor(diff / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+
+      // Warning color if less than 10 minutes left
+      if (diff <= 10 * 60 * 1000) {
+        timerEl.style.color = "red";
+      } else {
+        timerEl.style.color = "#ff6600";
+      }
+
+      timerEl.innerText = `Token expires in ${minutes}m ${seconds}s`;
+      setTimeout(updateTimer, 1000);
+    }
+    updateTimer();
+  }
+
+  function logoutAdmin() {
+    localStorage.removeItem("githubToken");
+    localStorage.removeItem("tokenTime");
+    location.reload();
+  }
+
+  window.addEventListener("load", () => {
+    const savedTime = localStorage.getItem("tokenTime");
+    if (savedTime) {
+      const expireTime = parseInt(savedTime) + (2 * 60 * 60 * 1000);
+      startTokenCountdown(expireTime);
+    }
+  });
+</script>
+
 </body>
 </html>
