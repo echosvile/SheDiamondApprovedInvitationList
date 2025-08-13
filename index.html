@@ -13,19 +13,21 @@
   section { min-height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; position:relative; padding:3rem 1.5rem; }
   .hero { background:url('background.jpg') center center no-repeat; background-size:cover; position:relative; overflow:hidden; }
   .hero::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.3); }
+
+  /* Thicker hero box */
   .hero-box {
-    position: relative; background: rgba(10,10,20,0.7); padding:3rem; border-radius:16px;
+    position: relative; background: rgba(10,10,20,0.7); padding:4rem; border-radius:16px;
     box-shadow:0 0 25px rgba(255,255,0,0.4); backdrop-filter: blur(10px);
-    display:flex; flex-direction: column; align-items:center; max-width: 450px; width:90%;
+    display:flex; flex-direction: column; align-items:center; max-width: 500px; width:95%;
     opacity:0; transform:translateY(20px); transition: all 0.8s ease;
   }
   .hero-box.active { opacity:1; transform:translateY(0); }
   .hero-box h1,h2 { color:white; margin-bottom:0.5rem; }
 
   /* Countdown scroll */
-  #countdown { display:flex; gap:10px; font-size:1.3rem; color:white; margin-bottom:1rem; }
-  .count-unit { position: relative; height:1.5em; overflow:hidden; display:flex; align-items:center; }
-  .count-unit span { display:block; transition: transform 0.5s ease; }
+  #countdown { display:flex; gap:10px; font-size:1.5rem; color:white; margin-bottom:1rem; }
+  .count-unit { position: relative; height:2em; overflow:hidden; width:3em; }
+  .count-unit span { display:block; height:2em; line-height:2em; text-align:center; color:white; }
 
   .hero-box input { margin-top:1rem; padding:12px; font-size:1rem; border-radius:8px; border:none; width:100%; outline:none; }
   .hero-box button { margin-top:1rem; padding:12px 20px; background:#d63384; color:white; font-weight:bold; border:none; border-radius:8px; cursor:pointer; }
@@ -55,7 +57,6 @@
   .twinkle { position:absolute; width:2px; height:2px; border-radius:50%; background:white; opacity:0.8; animation: twinkleAnim 2s infinite; }
   @keyframes twinkleAnim { 0%,100%{opacity:0.8;}50%{opacity:0;} }
 
-  @media(max-width:768px){ nav ul{display:none;} .menu-toggle{display:block;} .mobile-menu.active{display:block;} }
 </style>
 </head>
 <body>
@@ -97,6 +98,15 @@
   </div> <!-- End mainContent -->
 
 <script>
+  // Opening logo animation
+  setTimeout(()=>{
+    document.getElementById('openingLogo').style.display='none';
+    const main=document.getElementById('mainContent');
+    main.style.display='block';
+    const heroBox=document.getElementById('heroBox');
+    if(heroBox) setTimeout(()=>heroBox.classList.add('active'),200);
+  },3300);
+
   // Countdown scroll
   const countdownEl=document.getElementById('countdown');
   const eventDate=new Date("August 16, 2025 9:30:00").getTime();
@@ -104,11 +114,16 @@
   const spans={};
 
   units.forEach(u=>{
-    const div=document.createElement('div'); div.classList.add('count-unit');
-    const span=document.createElement('span'); span.innerText='0';
-    div.appendChild(span);
-    countdownEl.appendChild(div);
-    spans[u]=span;
+    const div=document.createElement('div'); div.className='count-unit';
+    div.style.height='2em'; div.style.overflow='hidden'; div.style.position='relative'; div.style.width='3em';
+    const spanContainer=document.createElement('div'); spanContainer.style.position='absolute'; spanContainer.style.top='0'; spanContainer.style.transition='transform 0.5s ease';
+    for(let i=0;i<100;i++){
+      const span=document.createElement('span'); span.style.display='block'; span.style.height='2em'; span.style.lineHeight='2em';
+      span.style.textAlign='center'; span.style.color='white'; span.innerText=i;
+      spanContainer.appendChild(span);
+    }
+    div.appendChild(spanContainer); countdownEl.appendChild(div);
+    spans[u]=spanContainer;
   });
 
   function updateCountdown(){
@@ -118,14 +133,10 @@
     const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
     const m=Math.floor((diff%(1000*60*60))/(1000*60));
     const s=Math.floor((diff%(1000*60))/1000);
-
-    spans['Days'].innerText=d; spans['Hours'].innerText=h; spans['Minutes'].innerText=m; spans['Seconds'].innerText=s;
-
-    // Scroll effect
-    spans['Days'].style.transform=`translateY(-${d*100}%)`;
-    spans['Hours'].style.transform=`translateY(-${h*100}%)`;
-    spans['Minutes'].style.transform=`translateY(-${m*100}%)`;
-    spans['Seconds'].style.transform=`translateY(-${s*100}%)`;
+    spans['Days'].style.transform=`translateY(-${d*2}em)`;
+    spans['Hours'].style.transform=`translateY(-${h*2}em)`;
+    spans['Minutes'].style.transform=`translateY(-${m*2}em)`;
+    spans['Seconds'].style.transform=`translateY(-${s*2}em)`;
   }
   setInterval(updateCountdown,1000);
   updateCountdown();
@@ -133,10 +144,8 @@
   // Twinkles
   const twinkleContainer=document.getElementById('twinkles');
   for(let i=0;i<30;i++){
-    const t=document.createElement('div');
-    t.classList.add('twinkle');
-    t.style.left=Math.random()*100+'%';
-    t.style.top=Math.random()*100+'%';
+    const t=document.createElement('div'); t.classList.add('twinkle');
+    t.style.left=Math.random()*100+'%'; t.style.top=Math.random()*100+'%';
     t.style.width=t.style.height=(1+Math.random()*2)+'px';
     t.style.animationDuration=(1+Math.random()*1.5)+'s';
     twinkleContainer.appendChild(t);
@@ -187,14 +196,6 @@
   function showPopup(html){ const popup=document.getElementById("popup"); const content=document.getElementById("popupContent"); content.innerHTML=html; popup.style.display="flex"; }
   function closePopup(){ document.getElementById("popup").style.display="none"; }
 
-  // Opening logo animation
-  setTimeout(()=>{
-    document.getElementById('openingLogo').style.display='none';
-    const main=document.getElementById('mainContent');
-    main.style.display='block';
-    const heroBox=document.getElementById('heroBox');
-    if(heroBox) setTimeout(()=>heroBox.classList.add('active'),200);
-  },3300);
 </script>
 
 </body>
