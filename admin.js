@@ -53,7 +53,7 @@ async function verifyToken() {
 }
 
 // ======= GitHub Repo Info =======
-const repoOwner = "Echosvile";
+const repoOwner = "echosvile";
 const repoName = "SheDiamondApprovedInvitationList";
 const filePath = "list.json";
 
