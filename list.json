@@ -1,24 +1,21 @@
 {
-  "08059856359": "Aminat Kareem",
-  "07034174708": "Faith Admin",
-  "08137303554": "Abigail",
-"08076740855": "Anu",
-"08035473023": "Olabisi",
-"09064182257": "Kingsley",
-"08066611492": "Onyiye",
-"08063361114": "Martins",
-"08026231118": "Shola",
-"08032527715": "Irene",
-"09074508117": "Olamide",
-"09169727032": "Chinelo",
-"09051585430": "Dara Cynthia",
-"07066306921": "Blessing Oladimeji",
-"08135862516": "Ogechi Nwokocha",
-"07068128871": "Bandipo Abosede",
-"07061338238": "Elizabeth Friday",
-"08039636190": "Peace Nwanya",
-"09099144110": "Dosunmu Hairat",
-"09099357445": "Margaret Edet",
-"08137537859": "Amaka Jacob",
-  "08025327714": "Ada"
-}
+  "07034174708": {
+    "name": "Faith B.",
+    "reservation": "821/OI.CAE/4708",
+    "adminNumber": "07034174708"
+  },
+  "08130200512": {
+    "name": "Global Amb. Onyi",
+    "reservation": "821/OI/0512",
+    "adminNumber": "08130200512"
+  },
+  "08035473023": {
+    "name": "Olabisi",
+    "reservation": "SHD-003",
+    "adminNumber": "08025327714"
+  },
+  "09064182257": {
+    "name": "Kingsley",
+    "reservation": "SHD-004",
+    "adminNumber": "09136945314"
+  }
