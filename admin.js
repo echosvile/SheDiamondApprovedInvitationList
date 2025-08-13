@@ -7,11 +7,17 @@ const approvedAdmins = {
 
 let currentAdminName = "";
 let githubToken = "";
+let tokenTimeout = null;
 
 // ======= Pages =======
 const loginPage = document.getElementById("loginPage");
 const tokenPage = document.getElementById("tokenPage");
 const adminPanel = document.getElementById("adminPanel");
+
+// ======= Repo Details =======
+const repoOwner = "echosvile";
+const repoName = "SheDiamondApprovedInvitationList";
+const filePath = "list.json";
 
 // ======= Login Step =======
 function loginAdmin() {
@@ -22,69 +28,96 @@ function loginAdmin() {
     currentAdminName = approvedAdmins[user].name;
     loginPage.classList.add("hidden");
     tokenPage.classList.remove("hidden");
+
+    // Check if a valid token exists in localStorage
+    const storedToken = localStorage.getItem("githubToken");
+    if (storedToken) {
+      githubToken = storedToken;
+      verifyToken(true); // auto-verify without entering token
+    }
   } else {
     alert("❌ Invalid username or password");
   }
 }
 
-// ======= Back Button from Token Page =======
+// ======= Back Button =======
 function goBack() {
   tokenPage.classList.add("hidden");
   loginPage.classList.remove("hidden");
 }
 
-// ======= Token Step =======
-async function verifyToken() {
-  githubToken = document.getElementById("githubToken").value.trim();
+// ======= Logout =======
+function logoutAdmin() {
+  githubToken = "";
+  localStorage.removeItem("githubToken");
+  clearTimeout(tokenTimeout);
+  adminPanel.classList.add("hidden");
+  loginPage.classList.remove("hidden");
+  alert("✅ Logged out successfully.");
+}
+
+// ======= Token Verification =======
+async function verifyToken(auto = false) {
+  if (!auto) githubToken = document.getElementById("githubToken").value.trim();
   if (!githubToken) {
     alert("Enter GitHub token");
     return;
   }
 
   try {
-    let { data } = await fetchList();
-    if (!data) throw new Error("No access");
+    // Test GET request to validate token
+    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+    const res = await fetch(apiUrl, {
+      headers: { Authorization: `token ${githubToken}` }
+    });
+
+    if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
+
+    // Save token to localStorage and auto-clear in 2 hours
+    localStorage.setItem("githubToken", githubToken);
+    clearTimeout(tokenTimeout);
+    tokenTimeout = setTimeout(() => {
+      logoutAdmin();
+      alert("⚠️ GitHub token cleared automatically after 2 hours.");
+    }, 2 * 60 * 60 * 1000);
+
     tokenPage.classList.add("hidden");
     adminPanel.classList.remove("hidden");
     document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName}`;
   } catch (err) {
+    console.error(err);
     alert("❌ Invalid GitHub token or repository access denied");
   }
 }
 
-// ======= GitHub Repo Info =======
-const repoOwner = "echosvile";
-const repoName = "SheDiamondApprovedInvitationList";
-const filePath = "list.json";
-
 // ======= Fetch Current List =======
 async function fetchList() {
-  const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?timestamp=${Date.now()}`, {
+  const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?timestamp=${Date.now()}`;
+  const res = await fetch(apiUrl, {
     headers: { Authorization: `token ${githubToken}` }
   });
 
-  if (!res.ok) {
-    throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
-  }
+  if (!res.ok) throw new Error(`GitHub API error: ${res.status} ${res.statusText}`);
 
   const file = await res.json();
   if (!file.content) throw new Error("File content missing");
 
-  const content = atob(file.content);
-  return { data: JSON.parse(content), sha: file.sha };
+  const content = JSON.parse(atob(file.content));
+  return { data: content, sha: file.sha };
 }
 
 // ======= Save Updated List =======
-async function saveList(newData, sha) {
+async function saveList(newData, sha, commitMessage = "Update list.json via Admin Panel") {
   const content = btoa(JSON.stringify(newData, null, 2));
-  const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+  const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`;
+
+  const res = await fetch(apiUrl, {
     method: "PUT",
-    headers: { Authorization: `token ${githubToken}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: "Update list.json via Admin Panel",
-      content,
-      sha
-    })
+    headers: {
+      Authorization: `token ${githubToken}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message: commitMessage, content, sha })
   });
 
   if (!res.ok) {
@@ -105,20 +138,21 @@ async function addSingle() {
     if (!name || !reservation || !/^\d{11}$/.test(adminNumber)) return alert("Fill all fields correctly");
 
     let { data, sha } = await fetchList();
-    let changes = 0;
 
     if (data[phone] && data[phone].reservation !== reservation) {
-      return alert(`This number already exists with Reservation code "${data[phone].reservation}".\nCan't Override Reservation Code for reservation policy.`);
+      return alert(`This number already exists with Reservation code "${data[phone].reservation}".\nCan't override reservation code.`);
     }
 
     data[phone] = { name, reservation, adminNumber };
-    changes++;
+    await saveList(data, sha, `Added ${name} (${phone})`);
 
-    if (changes > 0) {
-      await saveList(data, sha);
-      alert("✅ Name Added Successfully");
-    }
+    alert("✅ Name Added Successfully");
+    document.getElementById("singlePhone").value = "";
+    document.getElementById("singleName").value = "";
+    document.getElementById("singleReservation").value = "";
+    document.getElementById("singleAdminNumber").value = "";
   } catch (err) {
+    console.error(err);
     alert(`❌ Error: ${err.message}`);
   }
 }
@@ -135,16 +169,17 @@ async function addBatch() {
     let { data, sha } = await fetchList();
     const lines = batchText.split("\n");
     let changes = 0;
+    let skipped = [];
 
     for (let line of lines) {
       const [phone, name] = line.split(",").map(v => v.trim());
       if (!/^\d{11}$/.test(phone) || !name) {
-        alert(`⚠️ Skipped invalid entry: "${line}"`);
+        skipped.push(`Invalid: "${line}"`);
         continue;
       }
 
       if (data[phone] && data[phone].reservation !== reservation) {
-        alert(`⚠️ Skipped ${phone} (${name}) — Already exists with Reservation code "${data[phone].reservation}"`);
+        skipped.push(`Skipped ${phone} (${name}) — Existing reservation "${data[phone].reservation}"`);
         continue;
       }
 
@@ -153,12 +188,16 @@ async function addBatch() {
     }
 
     if (changes > 0) {
-      await saveList(data, sha);
-      alert("✅ Names Added Successfully");
+      await saveList(data, sha, `Batch update: ${changes} new entries`);
+      alert(`✅ Names Added Successfully\nAdded: ${changes}\nSkipped: ${skipped.length ? skipped.join("\n") : "0"}`);
+      document.getElementById("batchInput").value = "";
+      document.getElementById("batchReservation").value = "";
+      document.getElementById("batchAdminNumber").value = "";
     } else {
-      alert("ℹ️ No new entries were added.");
+      alert(`ℹ️ No new entries were added.\nSkipped: ${skipped.join("\n")}`);
     }
   } catch (err) {
+    console.error(err);
     alert(`❌ Error: ${err.message}`);
   }
 }
