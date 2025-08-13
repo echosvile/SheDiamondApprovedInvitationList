@@ -8,6 +8,11 @@ const approvedAdmins = {
 let currentAdminName = "";
 let githubToken = "";
 
+// ======= GitHub Repo Info =======
+const repoOwner = "Echosvile";
+const repoName = "SheDiamondApprovedInvitationList";
+const filePath = "list.json";
+
 // ======= Pages =======
 const loginPage = document.getElementById("loginPage");
 const tokenPage = document.getElementById("tokenPage");
@@ -23,7 +28,7 @@ function loginAdmin() {
     loginPage.classList.add("hidden");
     tokenPage.classList.remove("hidden");
   } else {
-    alert("Invalid username or password");
+    alert("❌ Invalid username or password");
   }
 }
 
@@ -31,17 +36,6 @@ function loginAdmin() {
 function goBack() {
   tokenPage.classList.add("hidden");
   loginPage.classList.remove("hidden");
-}
-
-// ======= Logout Function =======
-function logoutAdmin(showMessage) {
-  adminPanel.classList.add("hidden");
-  loginPage.classList.remove("hidden");
-  githubToken = "";
-  currentAdminName = "";
-  if (showMessage) {
-    alert("Session expired. Please log in again.");
-  }
 }
 
 // ======= Token Step with Verification =======
@@ -53,34 +47,46 @@ async function verifyToken() {
   }
 
   try {
-    // Test token by fetching repo info
-    const testRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}`, {
+    // Test request to check if token is valid for repo
+    const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}`, {
       headers: { Authorization: `token ${githubToken}` }
     });
 
-    if (!testRes.ok) {
-      alert("Invalid GitHub token or no access to this repository.");
+    if (!res.ok) {
+      alert("❌ Invalid GitHub token or no access to repository");
       return;
     }
+
+    // Save token in session and set expiry
+    sessionStorage.setItem("githubToken", githubToken);
+    sessionStorage.setItem("tokenExpiry", Date.now() + 2 * 60 * 60 * 1000); // 2 hours
 
     tokenPage.classList.add("hidden");
     adminPanel.classList.remove("hidden");
     document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName}`;
-
-    // Auto logout after 2 hours
-    setTimeout(() => {
-      logoutAdmin(true);
-    }, 2 * 60 * 60 * 1000);
-
   } catch (err) {
-    alert("Error verifying token. Please try again.");
+    alert("❌ Error verifying token");
   }
 }
 
-// ======= GitHub Repo Info =======
-const repoOwner = "Echosvile";
-const repoName = "SheDiamondApprovedInvitationList";
-const filePath = "list.json";
+// ======= Auto Token Expiry Check =======
+function checkTokenExpiry() {
+  const expiry = sessionStorage.getItem("tokenExpiry");
+  if (expiry && Date.now() > expiry) {
+    sessionStorage.removeItem("githubToken");
+    sessionStorage.removeItem("tokenExpiry");
+    alert("⚠️ Your session has expired. Please log in again.");
+    location.reload();
+  }
+}
+setInterval(checkTokenExpiry, 60 * 1000); // Check every minute
+
+// ======= Logout =======
+function logoutAdmin() {
+  sessionStorage.removeItem("githubToken");
+  sessionStorage.removeItem("tokenExpiry");
+  location.reload();
+}
 
 // ======= Fetch Current List =======
 async function fetchList() {
@@ -104,8 +110,9 @@ async function saveList(newData, sha) {
       sha
     })
   });
+
   if (res.ok) {
-    alert("✅ Data updated successfully");
+    alert("✅ Name(s) Added Successfully");
   } else {
     alert("❌ Failed to update data");
   }
@@ -123,8 +130,9 @@ async function addSingle() {
 
   let { data, sha } = await fetchList();
 
+  // Reservation policy check
   if (data[phone] && data[phone].reservation !== reservation) {
-    return alert(`This number already exists with Reservation code "${data[phone].reservation}".\nCan't Override Reservation Code.`);
+    return alert(`This number already exists with Reservation code "${data[phone].reservation}".\nCan't Override Reservation Code for reservation policy.`);
   }
 
   data[phone] = { name, reservation, adminNumber };
@@ -146,6 +154,7 @@ async function addBatch() {
     const [phone, name] = line.split(",").map(v => v.trim());
     if (!/^\d{11}$/.test(phone) || !name) continue;
 
+    // Reservation policy check
     if (data[phone] && data[phone].reservation !== reservation) {
       alert(`Skipped ${phone} (${name}) — Already exists with Reservation code "${data[phone].reservation}"`);
       continue;
