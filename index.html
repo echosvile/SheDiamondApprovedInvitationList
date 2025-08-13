@@ -6,83 +6,197 @@
 <title>SheDiamond Invitation Checker</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
 <style>
-* { margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
-html, body { font-family: 'Montserrat', sans-serif; overflow-x:hidden; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { font-family: 'Montserrat', sans-serif; overflow-x: hidden; }
 
-/* NAVIGATION */
-nav {
-  position:fixed; top:0; left:0; width:100%; z-index:999;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:10px 20px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
-}
-nav img { height:40px; }
-nav ul { display:flex; gap:1.2rem; list-style:none; }
-nav ul li a { color:white; text-decoration:none; font-size:0.95rem; font-weight:bold; }
-.menu-toggle { display:none; color:white; font-size:1.5rem; cursor:pointer; }
-.mobile-menu { display:none; position:fixed; top:60px; right:10px; background:rgba(0,0,0,0.95); padding:1.5rem; border-radius:12px; }
-.mobile-menu a { display:block; margin-bottom:1rem; color:white; text-decoration:none; font-weight:bold; }
+  /* NAVIGATION */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.5);
+  }
+  nav img { height: 40px; }
+  nav ul { display: flex; gap: 1.2rem; list-style: none; }
+  nav ul li a { color: white; text-decoration: none; font-weight: bold; }
+  .menu-toggle { display: none; color: white; font-size: 1.5rem; cursor: pointer; }
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 60px; right: 10px;
+    background: rgba(0,0,0,0.95);
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  .mobile-menu a { display: block; margin-bottom: 1rem; color: white; font-weight: bold; }
 
-/* SECTIONS */
-section { min-height:100vh; padding:5rem 1.5rem 3rem; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; position:relative; }
-.hero { background:url('background.jpg') center center / cover fixed; color:white; }
-.event-info { background:rgba(0,0,0,0.35); color:white; width:100%; }
-.mission { background:rgba(0,0,0,0.35); color:white; width:100%; }
+  /* SECTION BASE */
+  section {
+    min-height: 100vh;
+    padding: 5rem 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
 
-/* HERO BOX */
-.hero-box {
-  background: rgba(0,0,0,0.25);
-  padding:2rem 2.5rem;
-  border-radius:16px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.5);
-  text-align:center;
-  max-width:450px;
-  margin:auto;
-  animation: fadeInWake 3.3s ease forwards;
-}
-@keyframes fadeInWake {
-  0% { transform: scale(0.5); opacity:0; }
-  50% { transform: scale(1.05); opacity:1; }
-  100% { transform: scale(1); opacity:1; }
-}
-.hero-box h1 { font-size:2rem; margin-bottom:0.5rem; }
-.hero-box h2 { font-size:1.1rem; font-weight:400; margin-bottom:1rem; }
-.hero-box #countdown { background: rgba(0,0,0,0.5); padding:8px 16px; border-radius:20px; font-weight:600; font-size:1rem; margin-bottom:1rem; }
+  /* HERO SECTION */
+  .hero {
+    background: url('background.jpg') center center no-repeat;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.3);
+  }
+  .hero-box {
+    position: relative;
+    background: rgba(10,10,20,0.7);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(255,255,0,0.3);
+    backdrop-filter: blur(10px);
+    display:flex; flex-direction: column; align-items:center;
+    max-width: 400px; width:90%;
+    z-index:2;
+  }
+  .hero-box h1, .hero-box h2, #countdown { color: white; }
+  .hero-box input { margin-top: 1rem; padding: 12px; font-size:1rem; border-radius:8px; border:none; width:100%; outline:none; }
+  .hero-box button {
+    margin-top:1rem;
+    padding:12px 20px;
+    background:#d63384;
+    color:white;
+    font-weight:bold;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+  }
 
-/* INPUT */
-#phoneInput { width:100%; padding:12px; border-radius:8px; border:none; outline:none; font-size:1rem; margin-bottom:12px; }
-#checkBtn { width:100%; padding:12px; border-radius:8px; border:none; background:#d63384; color:white; font-weight:bold; cursor:pointer; }
-#loader { margin:1rem auto; width:30px; height:30px; border:3px solid #ccc; border-top:3px solid #d63384; border-radius:50%; animation:spin 1s linear infinite; display:none; }
-@keyframes spin { 0%{transform:rotate(0);}100%{transform:rotate(360deg);} }
-.result-box { margin-top:1rem; display:none; text-align:center; }
+  /* EVENT INFO */
+  .event-info {
+    background: rgba(10,30,60,0.5);
+    color:white;
+    width:100%;
+    padding:5rem 1.5rem;
+  }
 
-/* CONGRAT & NO INVITE */
-.result-box h3 { color:#d63384; margin-bottom:0.5rem; }
-.result-box p { line-height:1.6; margin-bottom:0.5rem; }
-.no-invite p:first-child { font-size:1.5rem; margin-bottom:0.5rem; }
+  /* MISSION */
+  .mission {
+    background: rgba(50,0,60,0.5);
+    color:white;
+    width:100%;
+    padding:5rem 1.5rem;
+  }
+  .mission img { max-width:80%; border-radius:16px; display:block; margin:2rem auto; }
 
-/* CAROUSEL */
-.carousel { position:relative; overflow:hidden; width:90%; max-width:600px; margin:auto; }
-.slides { display:flex; transition:transform 0.5s ease; }
-.slides img { width:100%; flex-shrink:0; border-radius:12px; }
-.carousel-arrow { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); border:none; color:white; font-size:24px; padding:12px; border-radius:50%; cursor:pointer; }
-.carousel-arrow.left { left:10px; }
-.carousel-arrow.right { right:10px; }
+  /* POPUP */
+  .popup {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index:1000;
+  }
+  .popup-content {
+    background: rgba(10,10,20,0.95);
+    border: 2px solid #ffcc00;
+    padding: 2rem;
+    border-radius:16px;
+    max-width:400px;
+    width:90%;
+    text-align:center;
+    color:white;
+    animation: popupFade 0.5s ease forwards;
+  }
+  @keyframes popupFade {
+    from { opacity:0; transform: scale(0.8); }
+    to { opacity:1; transform: scale(1); }
+  }
+  .popup-content h3, .popup-content p { margin-bottom:1rem; }
+  .popup-content .whatsapp-btn {
+    display:inline-block;
+    margin-top:0.5rem;
+    padding:10px 16px;
+    background:#25D366;
+    border-radius:8px;
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:1rem;
+  }
+  .popup-content button.back-btn {
+    margin-top:1rem;
+    padding:10px 16px;
+    border:none;
+    border-radius:8px;
+    background:#555;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+  }
 
-/* STARS BACKGROUND */
-#stars { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; overflow:hidden; }
-.star { position:absolute; width:2px; height:2px; background:white; border-radius:50%; opacity:0.8; }
+  /* OPENING LOGO */
+  #openingLogo {
+    position: fixed;
+    top:50%; left:50%;
+    transform:translate(-50%,-50%) scale(0.5);
+    width:200px; height:200px;
+    z-index:1500;
+    animation: logoZoom 3.3s ease forwards;
+  }
+  @keyframes logoZoom {
+    0% { opacity:0; transform:translate(-50%,-50%) scale(0.5); }
+    50% { opacity:1; transform:translate(-50%,-50%) scale(1.05); }
+    100% { opacity:0; transform:translate(-50%,-50%) scale(1); }
+  }
 
-/* RESPONSIVE */
-@media(max-width:768px){ nav ul{display:none;} .menu-toggle{display:block;} .mobile-menu.active{display:block;} }
+  /* STAR BACKGROUND */
+  .star {
+    position:absolute;
+    width:2px; height:2px;
+    background:white;
+    border-radius:50%;
+    opacity:0.8;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-10px); opacity:0.8; }
+    100% { transform: translateY(110vh); opacity:0; }
+  }
 
+  @media (max-width:768px) {
+    nav ul { display:none; }
+    .menu-toggle { display:block; }
+    .mobile-menu.active { display:block; }
+  }
 </style>
 </head>
 <body>
 
+<!-- Opening Logo -->
+<img src="logo.png" id="openingLogo" alt="SheDiamond Logo" />
+
+<!-- Stars container -->
 <div id="stars"></div>
 
+<!-- NAVIGATION -->
 <nav>
-  <img src="logo.png" alt="SheDiamond Logo"/>
+  <img src="logo_nav.png" alt="SheDiamond Logo" />
   <div class="menu-toggle" onclick="toggleMenu()">☰</div>
   <ul>
     <li><a href="#home">Home</a></li>
@@ -102,10 +216,8 @@ section { min-height:100vh; padding:5rem 1.5rem 3rem; display:flex; flex-directi
     <h1>SheDiamond August Edition</h1>
     <h2>Invitation Checker</h2>
     <div id="countdown">Loading...</div>
-    <input type="tel" id="phoneInput" placeholder="Enter Phone Number" pattern="\d*" maxlength="11"/>
-    <button id="checkBtn" onclick="checkInvite()">Check</button>
-    <div id="loader"></div>
-    <div class="result-box" id="resultBox"></div>
+    <input type="tel" id="phoneInput" placeholder="Enter Phone Number" pattern="[0-9]*" inputmode="numeric" />
+    <button onclick="checkInvite()">Check</button>
   </div>
 </section>
 
@@ -120,97 +232,95 @@ section { min-height:100vh; padding:5rem 1.5rem 3rem; display:flex; flex-directi
 <!-- MISSION SECTION -->
 <section class="mission" id="mission">
   <h2>Our Mission</h2>
-  <p>To raise 5,000 women to be financially free in Nigeria.<br/>
-  If you received an invitation, God is bringing you here for a reason.<br/>
-  If you received a reservation — don’t waste it.</p>
-  <div class="carousel">
-    <div class="slides" id="slides">
-      <img src="mission1.jpg" alt="Mission Image 1"/>
-      <img src="mission2.jpg" alt="Mission Image 2"/>
-      <img src="mission3.jpg" alt="Mission Image 3"/>
-    </div>
-    <button class="carousel-arrow left">&#10094;</button>
-    <button class="carousel-arrow right">&#10095;</button>
+  <p>To raise 5,000 women to be financially free in Nigeria.<br>
+     If you received an invitation, God is bringing you here for a reason.<br>
+     If you received a reservation — don’t waste it.</p>
+  <img src="mission1.jpg" alt="Mission Image" id="missionImg" />
+  <div>
+    <button onclick="prevMission()" style="margin-right:10px;">&#8592;</button>
+    <button onclick="nextMission()">&#8594;</button>
   </div>
 </section>
 
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-content" id="popupContent">
+    <!-- Content dynamically filled -->
+  </div>
+</div>
+
 <script>
-// Toggle mobile menu
-function toggleMenu(){ document.getElementById("mobileMenu").classList.toggle("active"); }
+  // Toggle mobile menu
+  function toggleMenu(){ document.getElementById("mobileMenu").classList.toggle("active"); }
 
-// Stars
-for(let i=0;i<100;i++){
-  let star=document.createElement("div");
-  star.className="star";
-  star.style.top=Math.random()*100+"%";
-  star.style.left=Math.random()*100+"%";
-  star.style.width=star.style.height=2+Math.random()*2+"px";
-  document.getElementById("stars").appendChild(star);
-}
+  // Countdown timer
+  const countdownEl = document.getElementById("countdown");
+  const eventDate = new Date("August 2, 2025 10:00:00").getTime();
+  setInterval(() => {
+    const now = new Date().getTime();
+    const diff = eventDate - now;
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const m = Math.floor((diff%(1000*60*60))/(1000*60));
+    const s = Math.floor((diff%(1000*60))/1000);
+    countdownEl.innerText = `${d}D ${h}H ${m}M ${s}S TO GO!`;
+  },1000);
 
-// Countdown
-const countdownEl=document.getElementById("countdown");
-const eventDate=new Date("August 2, 2025 10:00:00").getTime();
-setInterval(()=>{
-  const now=new Date().getTime();
-  const diff=eventDate-now;
-  if(diff<0){ countdownEl.innerText="Event has started!"; return; }
-  const d=Math.floor(diff/(1000*60*60*24));
-  const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-  const m=Math.floor((diff%(1000*60*60))/(1000*60));
-  const s=Math.floor((diff%(1000*60))/1000);
-  countdownEl.innerText=`${d}D ${h}H ${m}M ${s}S TO GO!`;
-},1000);
-
-// Invitation Checker
-async function checkInvite(){
-  const phone=document.getElementById("phoneInput").value.trim();
-  const loader=document.getElementById("loader");
-  const resultBox=document.getElementById("resultBox");
-  resultBox.style.display="none"; loader.style.display="block"; resultBox.innerHTML="";
-  if(!/^\d{11}$/.test(phone)){
-    loader.style.display="none"; resultBox.style.display="block";
-    resultBox.innerHTML=`<p style="color:#ff8080; font-weight:700;">Please enter a valid 11-digit phone number.</p>`;
-    return;
+  // Stars
+  const starsContainer = document.getElementById("stars");
+  for(let i=0;i<100;i++){
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.left = Math.random()*100+'%';
+    star.style.animationDuration = 5+Math.random()*5+'s';
+    star.style.width = star.style.height = (1+Math.random()*2)+'px';
+    starsContainer.appendChild(star);
   }
-  try{
-    const data=await fetch("list.json?"+Date.now()).then(res=>res.json());
-    setTimeout(()=>{
-      loader.style.display="none"; resultBox.style.display="block";
-      if(data[phone]){
-        const rec=data[phone];
-        resultBox.innerHTML=`
-          <h3>🎉 Congratulations ${rec.name}!</h3>
-          <p>You’ve been selected to attend The SheDiamond August Edition.</p>
-          <p>Your reservation code <strong>${rec.reservation}</strong> has been sent to ${phone}.</p>
-          <a href="https://wa.me/${rec.adminNumber}?text=Hello" class="whatsapp-btn">Contact Admin</a>
-        `;
-      }else{
-        resultBox.innerHTML=`
-          <div class="no-invite">
-            <p>😢 Sorry!</p>
-            <p>Please contact our support to check your invitation.</p>
-          </div>
-        `;
-      }
-    },1000);
-  }catch(e){
-    loader.style.display="none"; resultBox.style.display="block";
-    resultBox.innerHTML=`<p style="color:#ff8080;">Error fetching data. Please try again.</p>`;
-  }
-}
 
-// Carousel
-const slides=document.getElementById("slides");
-const leftBtn=document.querySelector(".carousel-arrow.left");
-const rightBtn=document.querySelector(".carousel-arrow.right");
-let index=0;
-const total=slides.children.length;
-function showSlide(i){ slides.style.transform=`translateX(${-i*100}%)`; }
-rightBtn.addEventListener("click",()=>{ index=(index+1)%total; showSlide(index); });
-leftBtn.addEventListener("click",()=>{ index=(index-1+total)%total; showSlide(index); });
-setInterval(()=>{ index=(index+1)%total; showSlide(index); },3000);
+  // Mission images swipe
+  const missionImages = ["mission1.jpg","mission2.jpg","mission3.jpg"];
+  let missionIndex = 0;
+  const missionImgEl = document.getElementById("missionImg");
+  function prevMission(){ missionIndex=(missionIndex-1+missionImages.length)%missionImages.length; missionImgEl.src=missionImages[missionIndex]; }
+  function nextMission(){ missionIndex=(missionIndex+1)%missionImages.length; missionImgEl.src=missionImages[missionIndex]; }
+
+  // Invitation check
+  async function checkInvite(){
+    const phone = document.getElementById("phoneInput").value.trim();
+    if(phone.length!==11){ alert("Enter valid 11-digit number"); return; }
+
+    const res = await fetch('list.json?' + Date.now());
+    const data = await res.json();
+
+    if(data[phone]){
+      const rec = data[phone];
+      setTimeout(()=>{ showPopup(`
+        <h3>🎉 Congratulations ${rec.name}!</h3>
+        <p>You’ve been selected to attend <strong>The SheDiamond August Edition Event</strong>.</p>
+        <p style="font-style: italic; font-weight: bold; color: #ff66cc;">
+          Holding this Saturday, 2nd Aug, 2025 @ Ground Floor Hall, St. Leo Catholic Church, Ikeja, Lagos at 10:00 AM
+        </p>
+        <p>Your reservation code: <strong style="color:#ff006e;">${rec.reservation}</strong> has been sent to <strong>${phone}</strong>.</p>
+         <p>Kindly take a screenshot of this page, show it to the reception at the event to get YOUR TICKET</p>
+        <a href="https://wa.me/${rec.adminNumber}?text=Thank%20you%20Admin%2C%20I%20got%20my%20reservation%20and%20I%20will%20be%20there" 
+           class="whatsapp-btn" target="_blank" rel="noopener noreferrer">💬 Chat Admin</a>
+        <button class="back-btn" onclick="closePopup()">Back</button>
+      `)},3000);
+    } else {
+      setTimeout(()=>{ showPopup(`
+        <h3>😔 Invitation Not Found</h3>
+        <p>Please contact your group admin to confirm your reservation.</p>
+        <button class="back-btn" onclick="closePopup()">Back</button>
+      `)},3000);
+    }
+  }
+
+  function showPopup(html){ const popup=document.getElementById("popup"); const content=document.getElementById("popupContent"); content.innerHTML=html; popup.style.display="flex"; }
+  function closePopup(){ document.getElementById("popup").style.display="none"; }
+
+  // Opening logo fade
+  setTimeout(()=>{ document.getElementById("openingLogo").style.display="none"; },3300);
+
 </script>
-
 </body>
 </html>
