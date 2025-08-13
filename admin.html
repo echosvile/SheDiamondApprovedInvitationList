@@ -14,6 +14,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    transition: opacity 0.5s ease;
   }
   .login-container, .token-container {
     background: white;
@@ -41,10 +42,6 @@
     font-size: 1rem;
     outline: none;
   }
-  input[type="tel"] {
-    -webkit-appearance: none;
-    appearance: none;
-  }
   button {
     background: #1877f2;
     color: white;
@@ -64,18 +61,14 @@
     margin-top: 1rem;
   }
   .logout-btn {
-    background: #ff4444;
-    color: white;
-    margin-bottom: 1rem;
+    background: #ff4d4d;
+    margin-top: 10px;
+  }
+  .logout-btn:hover {
+    background: #e60000;
   }
   .hidden {
     display: none;
-  }
-  #timer {
-    font-weight: bold;
-    color: #ff6600;
-    margin-bottom: 10px;
-    display: block;
   }
 </style>
 </head>
@@ -101,9 +94,8 @@
 
 <!-- Main Admin Panel -->
 <div id="adminPanel" class="hidden" style="padding: 1rem; max-width: 500px; margin: auto;">
-  <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
-  <span id="timer"></span>
   <h2 id="welcomeText"></h2>
+  <button class="logout-btn" onclick="logoutAdmin(false)">Logout</button>
 
   <h3>Add Single Entry</h3>
   <input type="tel" id="singlePhone" placeholder="Phone Number" pattern="[0-9]*" inputmode="numeric" maxlength="11">
@@ -120,48 +112,5 @@
 </div>
 
 <script src="admin.js"></script>
-
-<script>
-  function startTokenCountdown(expireTime) {
-    const timerEl = document.getElementById("timer");
-    function updateTimer() {
-      const now = Date.now();
-      const diff = expireTime - now;
-      if (diff <= 0) {
-        timerEl.innerText = "Session expired";
-        logoutAdmin();
-        return;
-      }
-      const minutes = Math.floor(diff / 60000);
-      const seconds = Math.floor((diff % 60000) / 1000);
-
-      // Warning color if less than 10 minutes left
-      if (diff <= 10 * 60 * 1000) {
-        timerEl.style.color = "red";
-      } else {
-        timerEl.style.color = "#ff6600";
-      }
-
-      timerEl.innerText = `Token expires in ${minutes}m ${seconds}s`;
-      setTimeout(updateTimer, 1000);
-    }
-    updateTimer();
-  }
-
-  function logoutAdmin() {
-    localStorage.removeItem("githubToken");
-    localStorage.removeItem("tokenTime");
-    location.reload();
-  }
-
-  window.addEventListener("load", () => {
-    const savedTime = localStorage.getItem("tokenTime");
-    if (savedTime) {
-      const expireTime = parseInt(savedTime) + (2 * 60 * 60 * 1000);
-      startTokenCountdown(expireTime);
-    }
-  });
-</script>
-
 </body>
 </html>
