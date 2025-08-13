@@ -33,7 +33,18 @@ function goBack() {
   loginPage.classList.remove("hidden");
 }
 
-// ======= Token Step =======
+// ======= Logout Function =======
+function logoutAdmin(showMessage) {
+  adminPanel.classList.add("hidden");
+  loginPage.classList.remove("hidden");
+  githubToken = "";
+  currentAdminName = "";
+  if (showMessage) {
+    alert("Session expired. Please log in again.");
+  }
+}
+
+// ======= Token Step with Verification =======
 async function verifyToken() {
   githubToken = document.getElementById("githubToken").value.trim();
   if (!githubToken) {
@@ -41,32 +52,29 @@ async function verifyToken() {
     return;
   }
 
-  // Validate GitHub token by making a real API request
   try {
+    // Test token by fetching repo info
     const testRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}`, {
       headers: { Authorization: `token ${githubToken}` }
     });
 
     if (!testRes.ok) {
-      alert("Invalid GitHub token");
+      alert("Invalid GitHub token or no access to this repository.");
       return;
     }
+
+    tokenPage.classList.add("hidden");
+    adminPanel.classList.remove("hidden");
+    document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName}`;
+
+    // Auto logout after 2 hours
+    setTimeout(() => {
+      logoutAdmin(true);
+    }, 2 * 60 * 60 * 1000);
+
   } catch (err) {
-    alert("Error validating GitHub token");
-    return;
+    alert("Error verifying token. Please try again.");
   }
-
-  // Save token and time in localStorage
-  localStorage.setItem("githubToken", githubToken);
-  localStorage.setItem("tokenTime", Date.now().toString());
-
-  tokenPage.classList.add("hidden");
-  adminPanel.classList.remove("hidden");
-  document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName}`;
-
-  // Start countdown timer
-  const expireTime = Date.now() + (2 * 60 * 60 * 1000);
-  startTokenCountdown(expireTime);
 }
 
 // ======= GitHub Repo Info =======
@@ -76,11 +84,9 @@ const filePath = "list.json";
 
 // ======= Fetch Current List =======
 async function fetchList() {
-  const token = githubToken || localStorage.getItem("githubToken");
   const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}?timestamp=${Date.now()}`, {
-    headers: { Authorization: `token ${token}` }
+    headers: { Authorization: `token ${githubToken}` }
   });
-  if (!res.ok) throw new Error("Failed to fetch list.json");
   const file = await res.json();
   const content = atob(file.content);
   return { data: JSON.parse(content), sha: file.sha };
@@ -88,11 +94,10 @@ async function fetchList() {
 
 // ======= Save Updated List =======
 async function saveList(newData, sha) {
-  const token = githubToken || localStorage.getItem("githubToken");
   const content = btoa(JSON.stringify(newData, null, 2));
   const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
     method: "PUT",
-    headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
+    headers: { Authorization: `token ${githubToken}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       message: "Update list.json via Admin Panel",
       content,
@@ -118,9 +123,8 @@ async function addSingle() {
 
   let { data, sha } = await fetchList();
 
-  // Reservation policy check
   if (data[phone] && data[phone].reservation !== reservation) {
-    return alert(`This number already exists with Reservation code "${data[phone].reservation}".\nCan't Override Reservation Code for reservation policy.`);
+    return alert(`This number already exists with Reservation code "${data[phone].reservation}".\nCan't Override Reservation Code.`);
   }
 
   data[phone] = { name, reservation, adminNumber };
@@ -142,7 +146,6 @@ async function addBatch() {
     const [phone, name] = line.split(",").map(v => v.trim());
     if (!/^\d{11}$/.test(phone) || !name) continue;
 
-    // Reservation policy check
     if (data[phone] && data[phone].reservation !== reservation) {
       alert(`Skipped ${phone} (${name}) — Already exists with Reservation code "${data[phone].reservation}"`);
       continue;
@@ -153,55 +156,3 @@ async function addBatch() {
 
   await saveList(data, sha);
 }
-
-// ======= Start Token Countdown =======
-function startTokenCountdown(expireTime) {
-  const timerEl = document.getElementById("timer");
-  function updateTimer() {
-    const now = Date.now();
-    const diff = expireTime - now;
-    if (diff <= 0) {
-      timerEl.innerText = "Session expired";
-      logoutAdmin();
-      return;
-    }
-    const minutes = Math.floor(diff / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-
-    if (diff <= 10 * 60 * 1000) {
-      timerEl.style.color = "red";
-    } else {
-      timerEl.style.color = "#ff6600";
-    }
-
-    timerEl.innerText = `Token expires in ${minutes}m ${seconds}s`;
-    setTimeout(updateTimer, 1000);
-  }
-  updateTimer();
-}
-
-// ======= Logout =======
-function logoutAdmin() {
-  localStorage.removeItem("githubToken");
-  localStorage.removeItem("tokenTime");
-  location.reload();
-}
-
-// ======= Auto-Login if Token Still Valid =======
-window.addEventListener("load", () => {
-  const savedToken = localStorage.getItem("githubToken");
-  const savedTime = localStorage.getItem("tokenTime");
-  if (savedToken && savedTime) {
-    const expireTime = parseInt(savedTime) + (2 * 60 * 60 * 1000);
-    if (Date.now() < expireTime) {
-      githubToken = savedToken;
-      loginPage.classList.add("hidden");
-      tokenPage.classList.add("hidden");
-      adminPanel.classList.remove("hidden");
-      document.getElementById("welcomeText").innerText = `Welcome, ${currentAdminName || "Admin"}`;
-      startTokenCountdown(expireTime);
-    } else {
-      logoutAdmin();
-    }
-  }
-});
